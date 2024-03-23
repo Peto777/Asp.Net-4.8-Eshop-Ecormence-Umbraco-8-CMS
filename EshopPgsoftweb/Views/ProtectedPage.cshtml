@@ -1,0 +1,16 @@
+﻿@inherits _EshoppgsoftwebViewPage
+@using eshoppgsoftweb.lib.Models
+@{
+    Layout = "layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 protected-menu">
+            @Html.Partial("Ecommerce/_ProtectedNavigation")
+        </div>
+        <div class="col-md-9 protected-content">
+            @Html.GetGridHtml(Model, "gridContent", "Bootstrap3-Fluid")
+        </div>
+    </div>
+</div>

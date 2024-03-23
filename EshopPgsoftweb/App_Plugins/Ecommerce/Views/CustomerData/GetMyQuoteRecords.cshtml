@@ -1,0 +1,48 @@
+﻿@using dufeksoft.lib.Model.Grid;
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Repositories
+@model QuoteListModel
+
+@{
+    string urlDetail = Url.Content("~/moj-ucet/moje-objednavky/detail-objednavky");
+}
+
+@if (Model.Items.Count > 0)
+{
+    foreach (QuoteForList quote in Model.Items)
+    {
+        <div class="myqoutes-row">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="row-item">
+                        Objednávka číslo: <strong>@quote.QuoteId</strong>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row-item with-borders">
+                        Zo dňa: <strong>@quote.DateFinishedView</strong>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row-item">
+                        SPOLU S DPH: <strong>@quote.QuotePriceWithVatWithCurrency</strong>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row-item buttons">
+                        <a href="@string.Format("{0}?id={1}", urlDetail, quote.pk)" class="btn btn-primary">DETAIL OBJEDNÁVKY</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @Html.Partial("Quote/QuotesPager", Model.QuotesPager)
+}
+else
+{
+    <div class="message-div">
+        <p>
+            Momentálne nemáte nič objednané. Tak smelo do toho!
+        </p>
+    </div>
+}

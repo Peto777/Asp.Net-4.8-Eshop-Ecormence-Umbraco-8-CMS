@@ -1,0 +1,70 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Models
+@using eshoppgsoftweb.lib.Repositories
+@using eshoppgsoftweb.lib.Util
+@model BasketReviewAndSendModel
+
+<div class="container">
+    <div class="basket-header-buttons">
+        <div class="center">
+            @Html.ValidationSummary(true, "Objednávku sa nepodarilo odoslať. Prosím opravte chyby a skúste to znovu.")
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <a href="@Url.Content("~/kosik")" class="header-button">1. SÚHRN OBJEDNÁVKY</a>
+            </div>
+            <div class="col-md-4 col-center">
+                <a href="@Url.Content("~/kosik/fakturacne-udaje")" class="header-button">2. FAKTURAČNÉ ÚDAJE</a>
+            </div>
+            <div class="col-md-4">
+                <div class="header-button active">3. POTVRDENIE OBJEDNÁVKY</div>
+            </div>
+        </div>
+    </div>
+
+    @Html.Action("BasketDetail", "Quote", new { area = "Ecommerce" })
+
+    @using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.QuoteController>("SubmitBasketReviewAndSend", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            <div class="row new-section">
+                <div class="col-md-12">
+                    <div class="form-item">
+                        @Html.CheckBoxFor(m => m.AgreeTradeRules, new { @class = "styled" })
+                        <label for="AgreeTradeRules"><strong>Súhlasím s </strong> <a href="@Url.Content("~/obchodne-podmienky")" target="_blank">Obchodnými podmienkami</a></label>
+                        @Html.ValidationMessageFor(m => m.AgreeTradeRules)
+                    </div>
+                </div>
+            </div>
+            <div class="basket-footer-buttons">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="@Url.Content("~/kosik")" class="btn btn-default">UPRAVIŤ OBJEDNÁVKU</a>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="submit-buttons">
+                            <a href="#" onclick="eshoppgsoftwebSubmitQuote(); return false;" class="btn btn-primary">ODOSLAŤ OBJEDNÁVKU S POVINNOSŤOU PLATBY</a>
+                            <input type="submit" id="submitBasketReviewAndSendButton" class="hidden" />
+                        </div>
+                        <div class="submit-pending hidden">
+                            <i class="fa fa-spinner fa-spin">
+                            </i>
+                            Objednávka sa odosiela ...
+                        </div>
+                    </div>
+                </div>
+                <div class="center">
+                    @Html.ValidationSummary(true, "Objednávku sa nepodarilo odoslať. Prosím opravte chyby a skúste to znovu.")
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    function eshoppgsoftwebSubmitQuote() {
+        $('.submit-buttons').addClass('hidden');
+        $('.submit-pending').removeClass('hidden');
+        document.getElementById('submitBasketReviewAndSendButton').click();
+    }
+</script>

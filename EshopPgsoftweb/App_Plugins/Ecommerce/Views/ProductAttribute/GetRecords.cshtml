@@ -1,0 +1,47 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@model ProductAttributePagingListModel
+
+@{
+    string urlInsert = Url.Content("~/moj-ucet/vlastnosti-produktov/pridat");
+    string urlUpdate = Url.Content("~/moj-ucet/vlastnosti-produktov/upravit");
+    string urlDelete = Url.Content("~/moj-ucet/vlastnosti-produktov/odstranit");
+}
+
+<h1>VLASTNOSTI PRODUKTOV</h1>
+@Html.Action("GetFilter", "ProductAttribute", new { area = "Ecommerce" })
+@{
+    var grid = new WebGrid(null, rowsPerPage: Model.ItemsPerPage, defaultSort: "ProductAttributeName");
+    grid.Bind(Model.Items, rowCount: Model.TotalItems, autoSortAndPage: false);
+    @grid.GetHtml(
+                    htmlAttributes: new { @id = "productattributeslist" },
+                    mode: WebGridPagerModes.All,
+                    tableStyle: "webgrid",
+                    headerStyle: "",
+                    footerStyle: "paging",
+                    alternatingRowStyle: "",
+                    columns: grid.Columns(
+                        grid.Column("", "", format: a =>
+                            Html.Raw(
+                            "<span class='tools'>" +
+                            "<a href='" + string.Format("{0}?id={1}", urlUpdate, a.pk.ToString()) + "' title='Upraviť vlastnosť' class='nowrap'><i class='fa fa-edit'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlDelete, a.pk.ToString()) + "' title='Odstrániť vlastnosť' class='nowrap'><i class='fa fa-trash'></i></a>"
+                            //+ "&#160;&#160;" +
+                            //"<a onclick='ecMoveUpProductAttribute(\"" + a.pk.ToString() + "\"); return false' title='Posunúť vlastnosť hore' class='nowrap'><i class='fas fa-long-arrow-alt-up'></i></a>"
+                            //+ "&#160;&#160;" +
+                            //"<a onclick='ecMoveDownProductAttribute(\"" + a.pk.ToString() + "\"); return false' title='Posunúť vlastnosť dole' class='nowrap'><i class='fas fa-long-arrow-alt-down'></i></a>"
+                            + "</span>")),
+                        grid.Column("ProductAttributeOrder", "Poradie", canSort: true),
+                        grid.Column("ProductAttributeGroup", "Skupina", canSort: true),
+                        grid.Column("ProductAttributeName", "Označenie vlastnosti", canSort: true)
+             ));
+
+    <script type="text/javascript">
+        $(function () {
+            $('#productattributeslist thead tr th:first').html(
+                "<a href='@urlInsert' class='btn btn-default' title='Pridať vlastnosť'>Pridať</a>"
+                );
+        });
+    </script>
+
+}

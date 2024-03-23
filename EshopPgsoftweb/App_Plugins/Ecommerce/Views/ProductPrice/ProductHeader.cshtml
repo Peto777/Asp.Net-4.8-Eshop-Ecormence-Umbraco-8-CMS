@@ -1,0 +1,23 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.ProductModel
+
+<div class="naplnspajzu-form">
+    <fieldset>
+        <legend>Produkt</legend>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.ProductCode)
+                    @Html.TextBoxFor(m => m.ProductCode, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(m => m.ProductCode)
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.ProductName)
+                    @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(m => m.ProductName)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>

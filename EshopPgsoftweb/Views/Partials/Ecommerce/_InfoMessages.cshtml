@@ -1,0 +1,24 @@
+﻿<div class="quote-info">
+    <div id="@eshoppgsoftweb.lib.Util.ConfigurationUtil.Ecommerce_Quote_InfMsgId"></div>
+</div>
+
+<div id="@eshoppgsoftweb.lib.Util.ConfigurationUtil.Ecommerce_Quote_ModalMsgId" class="modal fade" role="dialog">
+    <div class="modal-dialog quote-modal">
+        <div class="modal-header">
+            <a class="close" href="#" onclick="ecModalHide('@eshoppgsoftweb.lib.Util.ConfigurationUtil.Ecommerce_Quote_ModalMsgId'); return false;">x</a>
+        </div>
+        <div class="modal-content">
+            <div class="title">PRIDANÉ DO KOŠÍKA</div>
+            <div class="product-name"></div>
+            <div class="free-transport hidden">
+                <span class="cert-vert">
+                    <span></span>
+                </span>
+            </div>
+            <div class="buttons">
+                <a class="primary" href="#" onclick="ecModalHide('@eshoppgsoftweb.lib.Util.ConfigurationUtil.Ecommerce_Quote_ModalMsgId'); return false;">POKRAČUJEM V NAKUPOVANÍ</a>
+                <a href="@Url.Content("~/kosik")">DO POKLADNE</a>
+            </div>
+        </div>
+    </div>
+</div>

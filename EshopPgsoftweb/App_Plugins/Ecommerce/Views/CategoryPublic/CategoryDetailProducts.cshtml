@@ -1,0 +1,85 @@
+﻿@model CategoryPublicModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using dufeksoft.lib.Model.Grid;
+@{
+    GridPagerAndSorterModel pager = new GridPagerAndSorterModel(Model.ProductsPager.ItemCnt, Model.ProductsPager.GetPagerList(), Model.ProductsSorter);
+    bool isFavoriteProductCategory = Model.SearchModel != null && Model.SearchModel.Action == ProductSearchModel.ModelType.Favorite;
+    MembershipUser user = System.Web.Security.Membership.GetUser();
+}
+
+@if (isFavoriteProductCategory && user == null)
+{
+    <div class="message-div">
+        <p>Pre zobrazenie obľúbených produktov sa musíte prihlásiť.</p>
+        <p>
+            <a href="@Url.Content("~/moj-ucet/prihlasenie")" class="btn btn-primary btn-lg">PRIHLÁSIŤ</a>
+        </p>
+    </div>
+}
+else
+{
+
+    <div class="product-list">
+        @if (Model.Filter.ProductViewFilter.ProductViewType == CategoryPublicFilterModel_ProductView.ProductView_List)
+        {
+            <div class="product-list-list">
+                @if (Model.Products.Items.Count > 0)
+                {
+                    foreach (ProductModel product in Model.Products.Items)
+                    {
+                        @Html.Partial("ProductPublic/ProductItem_List", new ProductSessionModel(product, Model.SessionId))
+                    }
+                }
+                else
+                {
+                    <div class="message-div">
+                        <p>Žiadne produkty na zobrazenie.</p>
+                    </div>
+                }
+                @Html.Partial("CategoryDetailProductsPager", pager)
+            </div>
+        }
+        else
+        {
+            <div class="product-list-img">
+                @if (Model.Products.Items.Count > 0)
+                {
+                    for (int idx = 0; idx < Model.Products.Items.Count; idx = idx + 4)
+                    {
+                        <div class="row">
+                            <div class="col-md-3">
+                                @Html.Partial("ProductPublic/ProductItem_Img", new ProductSessionModel(Model.Products.Items[idx], Model.SessionId))
+                            </div>
+                            <div class="col-md-3">
+                                @if (idx + 1 < Model.Products.Items.Count)
+                                {
+                                    @Html.Partial("ProductPublic/ProductItem_Img", new ProductSessionModel(Model.Products.Items[idx + 1], Model.SessionId))
+                                }
+                            </div>
+                            <div class="col-md-3">
+                                @if (idx + 2 < Model.Products.Items.Count)
+                                {
+                                    @Html.Partial("ProductPublic/ProductItem_Img", new ProductSessionModel(Model.Products.Items[idx + 2], Model.SessionId))
+                                }
+                            </div>
+                            <div class="col-md-3">
+                                @if (idx + 3 < Model.Products.Items.Count)
+                                {
+                                    @Html.Partial("ProductPublic/ProductItem_Img", new ProductSessionModel(Model.Products.Items[idx + 3], Model.SessionId))
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="message-div">
+                        <p>Žiadne produkty na zobrazenie.</p>
+                    </div>
+                }
+                @Html.Partial("CategoryDetailProductsPager", pager)
+            </div>
+        }
+    </div>
+
+}

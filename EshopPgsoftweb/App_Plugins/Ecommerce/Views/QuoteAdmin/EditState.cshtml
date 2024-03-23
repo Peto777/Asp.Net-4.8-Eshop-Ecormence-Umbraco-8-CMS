@@ -1,0 +1,103 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Util
+@model QuoteModel
+
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.QuoteAdminController>("SaveState", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Partial("Ecommerce/_ModelError", Model.ModelErrors)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-item-hidden">
+                        @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.SessionId, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.FinishedSessionId, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.DateCreateView, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.QuoteYear, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.QuoteNumber, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.QuotePriceNoVat, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.QuotePriceWithVat, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row inner-row">
+                        <div class="col-md-6">
+                            <div class="form-item">
+                                @Html.LabelFor(x => x.QuoteId)
+                                @Html.TextBoxFor(m => m.QuoteId, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(m => m.QuoteId)
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-item">
+                                @Html.LabelFor(x => x.DateFinishedView)
+                                @Html.TextBoxFor(m => m.DateFinishedView, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(m => m.DateFinishedView)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row inner-row">
+                        <div class="col-md-12">
+                            <div class="form-item">
+                                @Html.LabelFor(x => x.QuoteState)
+                                @Html.DropDownListFor(m => m.QuoteStateCollectionKey, new SelectList(Model.DropDowns.QuoteStateCollection, "DataKey", "Name"), new { @class = "form-control chosen-select" })
+                                @Html.ValidationMessageFor(m => m.QuoteState)
+                            </div>
+                            <div class="form-item-hidden">
+                                @Html.TextBoxFor(m => m.QuoteState, new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row inner-row">
+                        <div class="col-md-6">
+                            <div class="form-item">
+                                <label>Suma bez DPH</label>
+                                <input class="form-control" readonly="readonly" value="@Model.TotalPriceNoVatWithCurrency" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-item">
+                                <label>Suma s DPH</label>
+                                <input class="form-control" readonly="readonly" value="@Model.TotalPriceWithVatWithCurrency" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-item">
+                                @Html.LabelFor(x => x.QuotePriceState)
+                                @Html.DropDownListFor(m => m.QuotePriceStateCollectionKey, new SelectList(Model.DropDowns.PriceStateCollection, "DataKey", "Name"), new { @class = "form-control chosen-select" })
+                                @Html.ValidationMessageFor(m => m.QuotePriceState)
+                                <div class="form-item-hidden">
+                                    @Html.TextBoxFor(m => m.QuotePriceState, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.Note)
+                        @Html.TextAreaFor(m => m.Note, new { @class = "form-control", style = "height:100px" })
+                        @Html.ValidationMessageFor(m => m.Note)
+                    </div>
+                </div>
+            </div>
+            <div class="row new-section">
+                <div class="col-md-12">
+                    <a href="#" onclick="document.getElementById('submitButtonState').click(); return false;" class="btn btn-default btn-lg">Uložiť zmeny stavu</a>
+                    <input type="submit" id="submitButtonState" class="hidden" />
+                </div>
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,81 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.EshoppgsoftwebMemberModel
+
+<h1>UŽÍVATEĽ</h1>
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.MemberController>("SaveRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="naplnspajzu-form">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-item-hidden">
+                        @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.IsCustomerEdit, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.Name)
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.Name)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <fieldset>
+                        <legend>Stav</legend>
+                        <div class="row inner-row">
+                            <div class="col-md-6">
+                                @Html.LabelFor(x => x.IsApproved)
+                                <span class="form-control frame">
+                                    @Html.CheckBoxFor(m => m.IsApproved, new { @class = "styled" })
+                                    <label for="IsApproved">&nbsp;</label>
+                                </span>
+                                @Html.ValidationMessageFor(m => m.IsApproved)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.LabelFor(x => x.IsLockedOut)
+                                <span class="form-control frame">
+                                    @Html.CheckBoxFor(m => m.IsLockedOut, new { @class = "styled" })
+                                    <label for="IsLockedOut">&nbsp;</label>
+                                </span>
+                                @Html.ValidationMessageFor(m => m.IsLockedOut)
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <fieldset>
+                        <legend>Oprávnenia</legend>
+                        <div class="row inner-row">
+                            <div class="col-md-6">
+                                @Html.LabelFor(x => x.IsAdminUser)
+                                <span class="form-control frame">
+                                    @Html.CheckBoxFor(m => m.IsAdminUser, new { @class = "styled" })
+                                    <label for="IsAdminUser">&nbsp;</label>
+                                </span>
+                                @Html.ValidationMessageFor(m => m.IsAdminUser)
+                            </div>
+                            <div class="col-md-6">
+                                @Html.LabelFor(x => x.IsCustomerUser)
+                                <span class="form-control frame">
+                                    @Html.CheckBoxFor(m => m.IsCustomerUser, new { @class = "styled" })
+                                    <label for="IsCustomerUser">&nbsp;</label>
+                                </span>
+                                @Html.ValidationMessageFor(m => m.IsCustomerUser)
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            @Html.ValidationSummary(true)
+            <div class="row new-section">
+                <div class="col-md-12">
+                    <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Zapísať</a>
+                    <a href="@Url.Content(string.Format("~/moj-ucet/{0}", Model.IsCustomerEdit == eshoppgsoftweb.lib.Util.ParamUtil.IsCustomerEdit ? "zakaznici" : "uzivatelia"))" class="btn btn-default btn-lg">Späť</a>
+                    <input type="submit" id="submitButton" class="hidden" />
+                </div>
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,184 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Models
+@using eshoppgsoftweb.lib.Repositories
+@using eshoppgsoftweb.lib.Util
+@model BasketModel
+@{
+    var quoteId = Model.CurrentQuote.SessionId;
+
+    MembershipUser user = EshoppgsoftwebCustomerCache.IsCustomerAuthenticated ? System.Web.Security.Membership.GetUser() : null;
+
+    string freeTransportMsg = Model.GetFreeTransportMessage();
+}
+
+
+
+@if (Model.CurrentQuote.Items.Count > 0)
+{
+    <div class="container">
+        <div class="basket-header-buttons">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="header-button active">1. SÚHRN OBJEDNÁVKY</div>
+                </div>
+                <div class="col-md-4 col-center">
+                    <div class="header-button">2. FAKTURAČNÉ ÚDAJE</div>
+                </div>
+                <div class="col-md-4">
+                    <div class="header-button">3. POTVRDENIE OBJEDNÁVKY</div>
+                </div>
+            </div>
+        </div>
+        <div class="basket-items-header">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-11">
+                    <div class="row">
+                        <div class="col-md-6 left">PRODUKT</div>
+                        <div class="col-md-1 left">KÓD</div>
+                        <div class="col-md-1">CENA</div>
+                        <div class="col-md-1 left">MJ</div>
+                        <div class="col-md-2">MNOŽSTVO</div>
+                        <div class="col-md-1">SPOLU</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @foreach (Product2QuoteModel product in Model.CurrentQuote.Items)
+        {
+            if (product.ItemCode == ConfigurationUtil.Ecommerce_Quote_DiscountItemCode)
+            {
+                continue;
+            }
+            var productId = product.PkProduct;
+            <div class="basket-product-item" id="pc-@productId">
+                <div class="row">
+                    <div class="col-md-1 col-xs-5 product-img">
+                        @if (product.IsProductItem)
+                        {
+                            <a href="#" onclick="ecRemoveProduct2Quote('@quoteId', '@productId', '@ConfigurationUtil.Ecommerce_Quote_InfMsgId'); return false;" class="btn-remove" title="Odstrániť z košíka">x</a>
+                            if (!string.IsNullOrEmpty(product.ProductImg))
+                            {
+                                <a href="@product.Url"><img src="@product.ProductImg" alt="@product.ProductName" class="img-responsive" /></a>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-11 col-xs-7">
+                        <div class="row">
+                            <div class="col-md-6 product-name">
+                                @if (product.IsProductItem)
+                                {
+                                    <a class="lnk-detail" href="@product.Url">@product.ProductName</a>
+                                }
+                                else
+                                {
+                                    <span>@product.ProductName</span>
+                                }
+                            </div>
+                            <div class="col-md-1">
+                                <span class="pip-label">KÓD:</span>
+                                <span class="pip-value">@product.ItemCode</span>
+                            </div>
+                            <div class="col-md-1 price">
+                                <span class="pip-label">CENA:</span>
+                                <span class="pip-value">@product.BasePriceWithCurrencyWithVat</span>
+                            </div>
+                            <div class="col-md-1">
+                                @if (product.IsProductItem)
+                                {
+                                    <span class="pip-label">MJ:</span>
+                                    <span class="pip-value">@product.UnitName</span>
+                                }
+                            </div>
+                            <div class="col-md-2">
+                                @if (product.IsProductItem)
+                                {
+                                    <div class="pip-line">
+                                        <span class="pip-label">Množstvo:</span>
+                                        <div class="product-pcs pip-value">
+                                            <a href="#" class="dec" data-target="@productId" data-cnt="@product.GetDecCnt()">-</a>
+                                            <span id="@productId" name="@productId" data-quote="@quoteId" data-info="@ConfigurationUtil.Ecommerce_Quote_InfMsgId">@product.ItemPcs2DecPlaces()</span>
+                                            <a href="#" class="inc" data-target="@productId" data-cnt="@product.GetIncCnt()">+</a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-1 price">
+                                <span class="pip-label">SPOLU:</span>
+                                <span class="pip-value"><strong><span class="with-vat">@product.TotalPriceWithCurrencyWithVat</span></strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @foreach (Product2QuoteModel product in Model.CurrentQuote.Items)
+        {
+            if (product.ItemCode != ConfigurationUtil.Ecommerce_Quote_DiscountItemCode)
+            {
+                continue;
+            }
+            <div class="basket-product-item">
+                <div class="row">
+                    <div class="col-md-1 product-img">
+                    </div>
+                    <div class="col-md-6">
+                        <span class="discount-name">@product.ItemName</span>
+                    </div>
+                    <div class="col-md-1 price"></div>
+                    <div class="col-md-1 price"></div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-1 price"><strong><span class="discount-with-vat">@product.TotalPriceWithCurrencyWithVat</span></strong></div>
+                </div>
+            </div>
+        }
+        <div class="basket-total-price with-vat">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-9">SPOLU</div>
+                <div class="col-md-2 price autoupdate">@Model.CurrentQuote.TotalPriceWithVatWithCurrency</div>
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(freeTransportMsg))
+        {
+            <div class="basket-free-transport-msg">
+                <span>@freeTransportMsg</span>
+            </div>
+        }
+        @if (user == null)
+        {
+            <div class="basket-user-msg">
+                <p>
+                    Ak sa zaregistrujete, nakupujete rýchlejšie a získate viacero výhod. <a href="@Url.Content("~/nova-registracia/vyhody")">Viac o výhodách registrácie zistíte tu.</a>
+                </p>
+                <p>
+                    Registrácia je rýchla a bezplatná. <a href="@Url.Content("~/nova-registracia")">Zaregistrovať sa môžete tu.</a>
+                </p>
+            </div>
+        }
+        <div class="basket-footer-buttons">
+            <div class="row">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-4">
+                    <a href="@Url.Content("~/kosik/fakturacne-udaje")" class="btn btn-primary">PREJSŤ NA FAKTURAČNÉ ÚDAJE ></a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="message-div">
+        <h1>KOŠÍK</h1>
+        <p>
+            Váš košík je prázdny.
+        </p>
+        <p>
+            <a href="@ConfigurationUtil.EshopRootUrl" class="btn btn-primary btn-lg">NAKUPOVAŤ</a>
+        </p>
+    </div>
+}

@@ -1,0 +1,46 @@
+﻿@model ProductPublicModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+
+@if (Model.RelatedProducts.Count > 0)
+{
+    string scrollid = Guid.NewGuid().ToString();
+
+    <div class="container-fluid related-products-container">
+        <div class="related-products-title">
+            Mohlo by vás zaujímať
+        </div>
+        <div class="product-list promo-container">
+            <div id="@scrollid" class="product-list-img">
+                <div class="promoted-list-img @string.Format("cnt-{0}", Model.RelatedProducts.Count)">
+                    <div class="row">
+                        @for (int idx = 0; idx < Model.RelatedProducts.Count; idx++)
+                        {
+                            if (Model.RelatedProducts[idx].pk == Model.ProductData.pk)
+                            {
+                                // Do not display itself
+                                continue;
+                            }
+                            <div class="col-md-3">
+                                @Html.Partial("ProductPublic/ProductItem_Img", new ProductSessionModel(Model.RelatedProducts[idx], Model.SessionId))
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            @if (Model.RelatedProducts.Count > 1)
+            {
+                <div class="promo-move-container">
+                    <a id="@(scrollid)-move-prev" href="#" class="promo-move prev hidden" onclick="ecMoveProductPromoPrev(this); return false;" data-target="@scrollid"><i class="fas fa-long-arrow-alt-left"></i> späť </a>
+                    <a id="@(scrollid)-move-next" href="#" class="promo-move next" onclick="ecMoveProductPromoNext(this); return false;" data-target="@scrollid">pozrieť viac <i class="fas fa-long-arrow-alt-right"></i></a>
+                </div>
+            }
+        </div>
+    </div>
+
+    if (Model.RelatedProducts.Count > 1)
+    {
+        <script>
+            $(document).ready(function () { ecMoveProductPromoInit('@scrollid'); });
+        </script>
+    }
+}

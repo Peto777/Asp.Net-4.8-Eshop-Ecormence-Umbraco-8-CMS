@@ -1,0 +1,38 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.CustomerFilterModel
+
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.CustomerAdminController>("SaveFilter", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            <fieldset>
+                <legend>Filter</legend>
+                @Html.AntiForgeryToken()
+                @Html.Partial("Ecommerce/_ModelError", Model.ModelErrors)
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-item-hidden">
+                            @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.TextBoxFor(m => m.UserId, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.TextBoxFor(m => m.SessionId, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.TextBoxFor(m => m.PropId, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.SearchText)
+                            @Html.TextBoxFor(m => m.SearchText, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.SearchText)
+                        </div>
+                    </div>
+                </div>
+                <div class="row submit">
+                    <div class="col-md-12">
+                        <div class="form-item">
+                            <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Načítať</a>
+                            <input type="submit" id="submitButton" class="hidden" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    }
+}
+

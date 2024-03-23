@@ -1,0 +1,55 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@model EshoppgsoftwebMemberListModel
+
+@{
+    string urlInsert = Url.Content("~/moj-ucet/uzivatelia/pridat");
+    string urlUpdate = Url.Content("~/moj-ucet/uzivatelia/upravit");
+    string urlDelete = Url.Content("~/moj-ucet/uzivatelia/odstranit");
+    string urlPassword = Url.Content("~/moj-ucet/uzivatelia/heslo");
+}
+
+<h1>UŽÍVATELIA</h1>
+@{
+    var grid = new WebGrid(null, rowsPerPage: Model.ItemsPerPage, defaultSort: "Name");
+    grid.Bind(Model.Items, rowCount: Model.TotalItems, autoSortAndPage: false);
+    @grid.GetHtml(
+                    htmlAttributes: new { @id = "memberlist" },
+                    mode: WebGridPagerModes.All,
+                    tableStyle: "webgrid",
+                    headerStyle: "",
+                    footerStyle: "paging",
+                    alternatingRowStyle: "",
+                    columns: grid.Columns(
+                        grid.Column("", "", format: a =>
+                            Html.Raw(
+                            "<span class='tools'>" +
+                            "<a href='" + string.Format("{0}?id={1}", urlUpdate, a.MemberId) + "' title='Upraviť užívateľa' class='nowrap'><i class='fa fa-edit'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlPassword, a.MemberId) + "' title='Zmeniť heslo užívateľa' class='nowrap'><i class='fas fa-lock'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlDelete, a.MemberId) + "' title='Odstrániť užívateľa' class='nowrap'><i class='fa fa-trash'></i></a>"
+                            + "</span>")),
+                        grid.Column("Name", "Užívateľské meno", canSort: true),
+                        grid.Column("IsApproved", "Povolený",
+                                    format: a => a.IsApproved ? "ÁNO" : string.Empty,
+                                    canSort: false),
+                        grid.Column("IsLockedOut", "Uzamknutý",
+                                    format: a => a.IsLockedOut ? "ÁNO" : string.Empty,
+                                    canSort: false),
+                        grid.Column("IsAdminUser", "Admin",
+                                    format: a => a.IsAdminUser ? "ÁNO" : string.Empty,
+                                    canSort: false),
+                        grid.Column("IsCustomerUser", "Zákazník",
+                                    format: a => a.IsCustomerUser ? "ÁNO" : string.Empty,
+                                    canSort: false)
+             ));
+
+    <script type="text/javascript">
+    $(function () {
+        $('#memberlist thead tr th:first').html(
+            "<a href='@urlInsert' class='btn btn-default' title='Pridať nového užívateľa'>Pridať</a>"
+            );
+    });
+    </script>
+
+}

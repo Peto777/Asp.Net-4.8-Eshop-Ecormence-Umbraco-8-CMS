@@ -1,0 +1,7 @@
+﻿@inherits _EshoppgsoftwebViewPage
+@using eshoppgsoftweb.lib.Models
+@{
+    Layout = "layout.cshtml";
+}
+
+@Html.GetGridHtml(Model, "gridContent", "Bootstrap3-Fluid")

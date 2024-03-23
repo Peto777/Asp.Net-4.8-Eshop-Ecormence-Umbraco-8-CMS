@@ -1,0 +1,23 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@model Product2CategoryItemsModel
+
+@Html.Action("GetNotInCategoryFilter", "Product2Category", new { area = "Ecommerce" })
+@{
+    var grid = new WebGrid(null, rowsPerPage: Model.ItemsPerPage, defaultSort: "ProductOrder");
+    grid.Bind(Model.Items, rowCount: Model.TotalItems, autoSortAndPage: false);
+    @grid.GetHtml(
+                    mode: WebGridPagerModes.All,
+                    tableStyle: "webgrid",
+                    headerStyle: "",
+                    footerStyle: "paging",
+                    alternatingRowStyle: "",
+                    columns: grid.Columns(
+                        grid.Column("", "", format: a =>
+                            Html.Raw(
+                            "<span class='tools'>" +
+                            "<a onclick='ecAddProduct2Category(\"" + Model.CategoryKey.ToString() + "\",\"" + a.PkProduct.ToString() + "\"); return false' title='Pridať produkt do kategórie' class='nowrap'><i class='fa fa-plus-circle'></i></a>"
+                            + "</span>")),
+                        grid.Column("ProductCode", "Kód", canSort: true),
+                        grid.Column("ProductName", "Názov", canSort: true)
+             ));
+}

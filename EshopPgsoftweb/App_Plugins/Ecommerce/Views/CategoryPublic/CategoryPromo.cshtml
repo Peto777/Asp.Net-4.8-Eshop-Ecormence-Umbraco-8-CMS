@@ -1,0 +1,30 @@
+﻿@model CategoryPromoModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+
+@if (Model.Products.Count > 0)
+{
+    string scrollid = Guid.NewGuid().ToString();
+    <div class="product-list promo-container">
+        <div class="product-list-promo-title">@Model.Title</div>
+        <div id="@scrollid" class="product-list-img">
+            <div class="promoted-list-img @string.Format("cnt-{0}", Model.Products.Count)">
+                <div class="row">
+                    @for (int idx = 0; idx < Model.Products.Count; idx++)
+                    {
+                        <div class="col-md-3">
+                            @Html.Partial("ProductPublic/ProductItem_Img", new ProductSessionModel(Model.Products[idx], Model.SessionId))
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="promo-move-container">
+            <a id="@(scrollid)-move-prev" href="#" class="promo-move prev hidden" onclick="ecMoveProductPromoPrev(this); return false;" data-target="@scrollid"><i class="fas fa-long-arrow-alt-left"></i> späť </a>
+            <a id="@(scrollid)-move-next" href="#" class="promo-move next" onclick="ecMoveProductPromoNext(this); return false;" data-target="@scrollid">ďalej <i class="fas fa-long-arrow-alt-right"></i></a>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () { ecMoveProductPromoInit('@scrollid'); });
+    </script>
+}

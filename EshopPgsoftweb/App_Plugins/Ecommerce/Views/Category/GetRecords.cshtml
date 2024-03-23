@@ -1,0 +1,110 @@
+﻿@using System.Text
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Controllers.Ecommerce
+@model CategoryModel
+
+@{
+    string urlInsert = string.Format("{0}?id={1}", Url.Content("~/moj-ucet/kategorie/pridat"), Model.pk.ToString());
+    string urlUpdate = Url.Content("~/moj-ucet/kategorie/upravit");
+    string urlDelete = Url.Content("~/moj-ucet/kategorie/odstranit");
+    string urlChildren = Url.Content("~/moj-ucet/kategorie");
+    string urlSubcateg = string.Format("{0}?id={1}&tab={2}", urlChildren, Model.pk.ToString(), _BaseCategoryController.ReturnToTabVal_Subcateg);
+    string urlProdInCat = string.Format("{0}?id={1}&tab={2}", urlChildren, Model.pk.ToString(), _BaseCategoryController.ReturnToTabVal_ProdInCat);
+    string urlProdNotInCat = string.Format("{0}?id={1}&tab={2}", urlChildren, Model.pk.ToString(), _BaseCategoryController.ReturnToTabVal_ProdNotInCat);
+
+    string urlPrint = Url.Action("GetCategoryOfferPdf", "Category");
+}
+
+<div class="breadcrumbs backoffice">@MvcHtmlString.Create(GetBreadcrumbs(Model, urlChildren))</div>
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+    <li class="@Model.TabSubcategActiveCss"><a href="@urlSubcateg">Podkategórie</a></li>
+    <li class="@Model.TabProdInCatActiveCss"><a href="@urlProdInCat">Produkty v kategórii</a></li>
+    <li class="@Model.TabProdNotInCatActiveCss"><a href="@urlProdNotInCat">Ostatné produkty</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    @if (!string.IsNullOrEmpty(Model.TabSubcategActiveCss))
+    {
+        var grid = new WebGrid(null, rowsPerPage: Model.Children.Count + 1, defaultSort: "CategoryOrder");
+        grid.Bind(Model.Children, rowCount: Model.Children.Count, autoSortAndPage: false);
+        @grid.GetHtml(
+                    htmlAttributes: new { @id = "categorieslist" },
+                    mode: WebGridPagerModes.All,
+                    tableStyle: "webgrid",
+                    headerStyle: "",
+                    footerStyle: "paging",
+                    alternatingRowStyle: "",
+                    columns: grid.Columns(
+                        grid.Column("", "", format: a =>
+                            Html.Raw(
+                            "<span class='tools'>" +
+                            "<a href='" + string.Format("{0}?id={1}", urlChildren, a.pk.ToString()) + "' title='Podkategórie' class='nowrap'><i class='fa fa-bars'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlUpdate, a.pk.ToString()) + "' title='Upraviť kategóriu' class='nowrap'><i class='fa fa-edit'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlDelete, a.pk.ToString()) + "' title='Odstrániť kategóriu' class='nowrap'><i class='fa fa-trash'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlPrint, a.pk.ToString()) + "' target='_blank' title='Ponukový list' class='nowrap'><i class='fa fa-print'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a onclick='ecMoveUpCategory(\"" + Model.pk.ToString() + "\",\"" + a.pk.ToString() + "\"); return false' title='Posunúť kategóriu hore' class='nowrap'><i class='fas fa-long-arrow-alt-up'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a onclick='ecMoveDownCategory(\"" + Model.pk.ToString() + "\",\"" + a.pk.ToString() + "\"); return false' title='Posunúť kategóriu dole' class='nowrap'><i class='fas fa-long-arrow-alt-down'></i></a>"
+                            + "</span>")),
+                        grid.Column("CategoryOrder", "Poradie", canSort: true),
+                        grid.Column("CategoryIsVisible", "Zobrazovať", canSort: true, format: a => string.Format("{0}", a.CategoryIsVisibleText)),
+                        grid.Column("CategoryCode", "Kód", canSort: true),
+                        grid.Column("CategoryName", "Názov", canSort: true),
+                        grid.Column("CategoryImg", "Obrázok", canSort: true)
+             ));
+
+        <script type="text/javascript">
+            $(function () {
+                $('#categorieslist thead tr th:first').html(
+                    "<a href='@urlInsert' class='btn btn-default' title='Pridať novú kategóriu'>Pridať</a>"
+                    );
+            });
+        </script>
+
+    }
+    @if (!string.IsNullOrEmpty(Model.TabProdInCatActiveCss))
+    {
+        <div>
+            @Html.Action("GetRecordsInCategory", "Product2Category", new { area = "Ecommerce", id = Model.pk })
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(Model.TabProdNotInCatActiveCss))
+    {
+        <div>
+            @Html.Action("GetRecordsNotInCategory", "Product2Category", new { area = "Ecommerce", id = Model.pk })
+        </div>
+    }
+</div>
+
+
+
+@functions
+{
+    public string GetBreadcrumbs(CategoryModel model, string url)
+    {
+        StringBuilder str = new StringBuilder();
+        str.Append(string.Format("<a href='{0}?id={1}' >Hlavné kategórie</a>", url, Guid.NewGuid().ToString()));
+        for (int i = model.Parents.Count - 1; i > -1; i--)
+        {
+            CategoryModel parent = model.Parents[i];
+            str.Append("<span class='separator'>-</span>");
+            if (i == 0)
+            {
+                str.Append(string.Format("<span>{0}</span>", parent.CategoryName));
+            }
+            else
+            {
+                str.Append(string.Format("<a href='{0}?id={1}' >{2}</a>", url, parent.pk.ToString(), parent.CategoryName));
+            }
+        }
+
+        return str.ToString();
+    }
+}

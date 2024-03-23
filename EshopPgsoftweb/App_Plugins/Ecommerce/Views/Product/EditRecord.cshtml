@@ -1,0 +1,324 @@
+﻿@model ProductModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Repositories
+@using System.Text
+
+<h1>PRODUKT</h1>
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.ProductController>("SaveRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+<div class="naplnspajzu-form img-model-div">
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Partial("Ecommerce/_ModelError", Model.ModelErrors)
+            @Html.ValidationSummary(true, "Údaje sa nepodarilo zapísať. Prosím opravte chyby a skúste to znovu.")
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-item-hidden">
+                @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.ProducerKey, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.ProducerName, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.AvailabilityKey, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.AvailabilityName, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.ProductImg, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="form-item">
+                @Html.LabelFor(x => x.ProductOrder)
+                @Html.TextBoxFor(m => m.ProductOrder, new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(m => m.ProductOrder)
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-item">
+                @Html.LabelFor(x => x.ProductIsVisible)
+                <span class="form-control frame">
+                    @Html.CheckBoxFor(m => m.ProductIsVisible, new { @class = "styled" })
+                    <label for="ProductIsVisible">&nbsp;</label>
+                </span>
+                @Html.ValidationMessageFor(m => m.ProductIsVisible)
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-item">
+                @Html.LabelFor(x => x.ProductCode)
+                @Html.TextBoxFor(m => m.ProductCode, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ProductCode)
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-item">
+                @Html.LabelFor(x => x.ProducerCollectionKey)
+                @Html.DropDownListFor(m => m.ProducerCollectionKey, new SelectList(Model.DropDowns.ProducerCollection, "DataKey", "Name"), new { @class = "form-control chosen-select" })
+                @Html.ValidationMessageFor(m => m.ProducerCollectionKey)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-item">
+                @Html.LabelFor(x => x.ProductName)
+                @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ProductName)
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-item">
+                @Html.LabelFor(x => x.ProductCountry)
+                @Html.TextBoxFor(m => m.ProductCountry, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ProductCountry)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-item">
+                @Html.LabelFor(x => x.ProductText)
+                @Html.TextAreaFor(m => m.ProductText, new { @class = "form-control", rows = 3 })
+                @Html.ValidationMessageFor(m => m.ProductText)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-item">
+                @Html.LabelFor(x => x.ProductDescription)
+                @Html.TextAreaFor(m => m.ProductDescription, new { @class = "form-control ckedit" })
+                @Html.ValidationMessageFor(m => m.ProductDescription)
+            </div>
+        </div>
+    </div>
+    <fieldset>
+        <legend>SEO</legend>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.ProductUrl)
+                    @Html.TextBoxFor(m => m.ProductUrl, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ProductUrl)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.ProductMetaTitle)
+                    @Html.TextBoxFor(m => m.ProductMetaTitle, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ProductMetaTitle)
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.ProductMetaKeywords)
+                    @Html.TextBoxFor(m => m.ProductMetaKeywords, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ProductMetaKeywords)
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.ProductMetaDescription)
+                    @Html.TextBoxFor(m => m.ProductMetaDescription, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ProductMetaDescription)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Skladové informácie</legend>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.ProductIsNew)
+                    <span class="form-control frame">
+                        @Html.CheckBoxFor(m => m.ProductIsNew, new { @class = "styled" })
+                        <label for="ProductIsNew">&nbsp;</label>
+                    </span>
+                    @Html.ValidationMessageFor(m => m.ProductIsNew)
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.ProductIsSale)
+                    <span class="form-control frame">
+                        @Html.CheckBoxFor(m => m.ProductIsSale, new { @class = "styled" })
+                        <label for="ProductIsSale">&nbsp;</label>
+                    </span>
+                    @Html.ValidationMessageFor(m => m.ProductIsSale)
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.UnitTypeId)
+                    @Html.DropDownListFor(m => m.UnitTypeId, new SelectList(Model.DropDowns.ProductUnitCollection, "DataKey", "Name"), new { @class = "form-control chosen-select" })
+                    @Html.ValidationMessageFor(m => m.UnitTypeId)
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.AvailabilityCollectionKey)
+                    @Html.DropDownListFor(m => m.AvailabilityCollectionKey, new SelectList(Model.DropDowns.AvailabilityCollection, "DataKey", "Name"), new { @class = "form-control chosen-select" })
+                    @Html.ValidationMessageFor(m => m.AvailabilityCollectionKey)
+                </div>
+            </div>
+            <div class="col-md-5 hidden">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.ProductDurability)
+                    @Html.TextBoxFor(m => m.ProductDurability, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ProductDurability)
+                </div>
+            </div>
+        </div>
+        <div class="row hidden">
+            <div class="col-md-4">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.ProductUnitWeight)
+                    @Html.TextBoxFor(m => m.ProductUnitWeight, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ProductUnitWeight)
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.ProductUnitsInPckg)
+                    @Html.TextBoxFor(m => m.ProductUnitsInPckg, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ProductUnitsInPckg)
+                </div>
+            </div>
+
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Zaradenie do kategórií</legend>
+        <div class="product-in-categories">
+            @for (int i = 0; i < Model.ProductCategories.SelectedCategories.Count; i++)
+            {
+                <div class="product-in-category">
+                    @Html.TextBoxFor(m => m.ProductCategories.SelectedCategories[i], new { @class = "hidden pkcategory", @readonly = "readonly" })
+                </div>
+            }
+            <div class="category-tree">
+                @DrawCategoryTree()
+            </div>
+        </div>
+    </fieldset>
+
+
+    <fieldset>
+        <legend>Vlastnosti pre filter</legend>
+        <div class="row inner-row">
+            <div class="col-md-12">
+                <div class="form-item-hidden">
+                    @Html.TextBoxFor(m => m.ProductAttributes.pk, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+        </div>
+        @{
+            string firstGroup = "first";
+        }
+        @foreach (List<int> group in Model.ProductAttributes.GetItemIndexesInGroups())
+        {
+            <div class="ecbo-attribute-group @firstGroup">
+                <div class="ecbo-attribute-group-title">@Model.ProductAttributes.Items[group[0]].Group</div>
+                <div class="row inner-row">
+                    @foreach (int i in group)
+                    {
+                        <div class="col-md-2">
+                            <div class="form-item-hidden">
+                                @Html.TextBoxFor(m => m.ProductAttributes.Items[i].ProductKey, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.TextBoxFor(m => m.ProductAttributes.Items[i].AttributeKey, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.TextBoxFor(m => m.ProductAttributes.Items[i].Title, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.TextBoxFor(m => m.ProductAttributes.Items[i].Group, new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                            <div class="form-item">
+                                @{
+                                    string labelFor = string.Format("ProductAttributes_Items_{0}__IsSelected", i);
+                                }
+                                @Html.CheckBoxFor(m => m.ProductAttributes.Items[i].IsSelected, new { @class = "styled style-2" })
+                                <label for="@labelFor">@Model.ProductAttributes.Items[i].Title</label>
+                                @Html.ValidationMessageFor(m => m.ProductAttributes.Items[i].IsSelected)
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            firstGroup = "";
+        }
+    </fieldset>
+
+
+    <fieldset>
+        <legend>Súvisiace produkty</legend>
+        <div class="form-item-hidden">
+            @Html.TextBoxFor(m => m.ProductRelations.pk, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+        <div class="related-products">
+            @for (int i = 0; i < Model.ProductRelations.Items.Count; i++)
+            {
+                <div class="related-product">
+                    @Html.TextBoxFor(m => m.ProductRelations.Items[i].PkProductRelated, new { @class = "hidden pkrelated", @readonly = "readonly" })
+                    <a href="#" class="drop-relation-btn" title="Odstrániť súvisiaci produkt"><i class="fa fa-trash-alt"></i></a>
+                    <span class="code">@Model.ProductRelations.Items[i].RelatedProduct.ProductCode</span>
+                    <span class="name">@Model.ProductRelations.Items[i].RelatedProduct.ProductName</span>
+                </div>
+            }
+            <div class="related-product-add">
+                <input id="relatedProductSearch" name="relatedProductSearch" class="form-control" placeholder="Vyhľadať a pridať súvisiaci produkt ..." />
+                <i id="spinRelatedProductSearch" class="fa fa-spinner fa-spin hidden"></i>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="row new-section">
+        <div class="col-md-12">
+            <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Zapísať</a>
+            <a href="@Url.Content("~/moj-ucet/produkty")" class="btn btn-default btn-lg">Späť</a>
+            <input type="submit" id="submitButton" class="hidden" />
+        </div>
+    </div>
+</div>
+    }
+}
+
+@Html.Partial("Ecommerce/_CKEditor", new eshoppgsoftweb.lib.Models.Ecommerce.CKEditorModel("ckedit", "400"))
+
+@functions
+{
+    MvcHtmlString DrawCategoryTree()
+    {
+        return MvcHtmlString.Create(TreeChildren(Model.ProductCategories.AllCategories.Root));
+    }
+
+    string TreeChildren(CategoryModel parent)
+    {
+        if (!parent.HasChildren)
+        {
+            return string.Empty;
+        }
+
+        StringBuilder str = new StringBuilder();
+
+        str.Append("<ul>");
+        foreach (CategoryModel child in parent.Children)
+        {
+            string categoryKey = child.pk.ToString();
+            str.Append(
+                string.Format("<li class='{0}'><span class='pct-children {1}'><i class='fa fa-plus fa-fw'></i><i class='fa fa-minus fa-fw'></i></span><input class='pct-cb styled' type='checkbox' {2} id='cid-{3}' name='cid-{3}' data-key='{3}'/><label for='cid-{3}'>{4}</label>",
+                Model.ProductCategories.IsChildSelected(categoryKey) ? "" : "closed",
+                child.HasChildren ? "" : "hidden",
+                Model.ProductCategories.IsSelected(categoryKey) ? "checked" : "",
+            child.pk,
+                child.CategoryName));
+            str.Append(TreeChildren(child));
+            str.Append("</li>");
+        }
+        str.Append("</ul>");
+
+        return str.ToString();
+    }
+}

@@ -1,0 +1,95 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.CustomerModel
+
+<h1>Prajete si skutočne odstrániť vybraného zákazníka?</h1>
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.CustomerAdminController>("DeleteRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-item-hidden">
+                        @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.OwnerId, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.CountryKey, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.CountryCollectionKey, new { @class = "form-control", @readonly = "readonly" })
+                        <input id="keepMember" name="keepMember" value="" />
+                    </div>
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.OwnerCollectionId)
+                        @Html.TextBoxFor(m => m.OwnerName, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.OwnerCollectionId)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.Name)
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.Name)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.CountryCollectionKey)
+                        @Html.TextBoxFor(m => m.CountryName, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.CountryCollectionKey)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.Street)
+                        @Html.TextBoxFor(m => m.Street, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.Street)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.City)
+                        @Html.TextBoxFor(m => m.City, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.City)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.Zip)
+                        @Html.TextBoxFor(m => m.Zip, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.Zip)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.Phone)
+                        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.Phone)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.Email)
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.Email)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row submit">
+                <div class="col-md-12">
+                    <a href="#" onclick="ecCustomerDeleteSubmit('no'); return false;" class="btn btn-primary btn-lg">Odstrániť</a>
+                    <a href="@Url.Content("~/moj-ucet/zakaznici")" class="btn btn-default btn-lg">Späť</a>
+                    <a href="#" onclick="ecCustomerDeleteSubmit('yes'); return false;" class="btn btn-default btn-lg">Odstrániť iba profil zákazníka, ale ponechať užívateľa</a>
+                    <input type="submit" id="submitButton" class="hidden" />
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<script type="text/javascript">
+    function ecCustomerDeleteSubmit(kmv) {
+        $('#keepMember').val(kmv);
+        document.getElementById('submitButton').click();
+    }
+</script>

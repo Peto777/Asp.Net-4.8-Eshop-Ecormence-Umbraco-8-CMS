@@ -1,0 +1,97 @@
+﻿@model ProductSessionModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Util
+@{
+    ProductModel product = Model.ProductData;
+    string pcsToAddId = Guid.NewGuid().ToString();
+}
+
+<div class="product-item">
+    <div class="row">
+        <div class="col-md-1 col-xs-5">
+            <div class="img">
+                @if (!string.IsNullOrEmpty(product.ProductImg))
+                {
+                    <a href="@product.Url">
+                        <img src="@Url.Content(string.Format("~{0}", product.ProductImg))" />
+                    </a>
+                }
+            </div>
+            <div class="mobile-only">
+                <div class="price-with-vat">
+                    @product.GetPriceString(product.GetCurrentPrice_WithVat())
+                    @if (product.IsDiscount())
+                    {
+                        <span class="base-price">@product.GetBasePriceIfDiscount()</span>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-11 col-xs-7">
+            <a href="@product.Url">
+                <div class="row first">
+                    <div class="col-md-9">
+                        <div class="name">@product.ProductName</div>
+                    </div>
+                    @{
+                        string discountPerc = product.GetDiscountPercString();
+                        bool anySigns = !string.IsNullOrEmpty(discountPerc) || product.ProductIsNew || product.ProductIsSale;
+                    }
+                    @if (anySigns)
+                    {
+                        <div class="col-md-3">
+                            <div class="signs">
+                                @if (!string.IsNullOrEmpty(discountPerc))
+                                {
+                                    <div class="discount"><span>ZĽAVA @discountPerc</span></div>
+                                }
+                                @if (product.ProductIsNew)
+                                {
+                                    <div class="new"><span>NOVINKA</span></div>
+                                }
+                                @if (product.ProductIsSale)
+                                {
+                                    <div class="sale"><span>VÝPREDAJ</span></div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </a>
+            <div class="row second">
+                <div class="col-md-8 desktop-only">
+                    <div class="price-with-vat">
+                        @product.GetPriceString(product.GetCurrentPrice_WithVat())
+                        @if (product.IsDiscount())
+                        {
+                            <span class="base-price">@product.GetBasePriceIfDiscount()</span>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="to-basket-wrapper">
+                        <div class="to-basket">
+                            <div class="to-basket-pcs">
+                                <a href="#" class="dec" data-target="@pcsToAddId" data-cnt="@product.GetDecCnt()"><i class="fa fa-minus fa-fw"></i></a>
+                                <span id="@pcsToAddId" name="@pcsToAddId">@product.GetInitialPcs()</span><span class="to-basket-unit">@product.UnitTypeName</span>
+                                <a href="#" class="inc" data-target="@pcsToAddId" data-cnt="@product.GetIncCnt()"><i class="fa fa-plus fa-fw"></i></a>
+                            </div>
+                            <a href="#" onclick="ecAddProduct2Quote('@Model.SessionId', '@pcsToAddId', '@product.pk.ToString()', '@Model.MemberId', '@ConfigurationUtil.Ecommerce_Quote_InfMsgId', '@ConfigurationUtil.Ecommerce_Quote_ModalMsgId'); return false;" class="to-basket-btn" title="PRIDAŤ DO KOŠÍKA"><i class="fa fa-shopping-cart"></i></a>
+                            @if (!string.IsNullOrEmpty(Model.MemberId))
+                            {
+                                if (product.IsFavorite)
+                                {
+                                    <a href="#" onclick="ecRemoveProduct2Favorite('@product.pk.ToString()', '@Model.MemberId', '@ConfigurationUtil.Ecommerce_Quote_InfMsgId'); return false;" class="to-favorite-btn" title="ODSTRÁNIŤ Z OBĽÚBENÝCH"><i class="fa fa-trash"></i></a>
+                                }
+                                else
+                                {
+                                    <a href="#" onclick="ecAddProduct2Favorite('@product.pk.ToString()', '@Model.MemberId', '@ConfigurationUtil.Ecommerce_Quote_InfMsgId'); return false;" class="to-favorite-btn" title="PRIDAŤ MEDZI OBĽÚBENÉ"><i class="fa fa-heart"></i></a>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

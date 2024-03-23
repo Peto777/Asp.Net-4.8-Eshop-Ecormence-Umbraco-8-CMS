@@ -1,0 +1,15 @@
+﻿@inherits UmbracoViewPage
+
+@{
+    Layout = null;
+    string linkUrl = "";
+    if (Model.HasValue("redirectUrl"))
+    {
+        linkUrl = Model.Value("redirectUrl").ToString();
+    }
+
+    if (!string.IsNullOrEmpty(linkUrl))
+    {
+        Response.Redirect(linkUrl);
+    }
+}

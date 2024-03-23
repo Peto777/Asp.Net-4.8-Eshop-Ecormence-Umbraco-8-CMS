@@ -1,0 +1,200 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.SelectImgModel
+
+<link href="@Url.Content("~/Styles/css/uploadfile.min.css?ver=20170105")" type="text/css" rel="stylesheet" />
+<script src="@Url.Content("~/Scripts/jquery.Form.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.uploadfile.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.lazy.min.js")" type="text/javascript"></script>
+<div class="naplnspajzu-form  img-select-div">
+    <fieldset>
+        <legend>Vyberte obrázok</legend>
+        <div class="row">
+            <div class="col-md-3">
+                <a onclick="ecImageSelectOk(); return false;" class="btn btn-default btn-lg">OK</a>
+                <a onclick="ecImageSelectCancel(); return false;" class="btn btn-default btn-lg">Zrušiť</a>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input class="search-img form-control" type="text" placeholder="vyhľadať obrázok" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="fileuploader"></div>
+                <a onclick="ecImageDelete(); return false;" class="btn btn-default btn-sm">Odstrániť</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="img-grid-loader"><i class="fa fa-spinner fa-spin fa-2x"></i> Načítavam dostupné obrázky. Moment prosím ...</div>
+                <div class="img-grid-container">
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+<script>
+    $(document).ready(function () {
+        var extraObj = $("#fileuploader").uploadFile({
+            url: '@Url.Content("~/Umbraco/Ecommerce/FileUploadApi/UploadFile")',
+            statusBarWidth: 'auto',
+            dragdropWidth: 'auto',
+            autoSubmit: true,
+            showProgress: true,
+            acceptFiles: "image/*",
+            dragDropStr: "<span><b>Pretiahnite súbory tu alebo kliknite na Pridať</b></span>",
+            uploadStr: "Pridať",
+            abortStr: "Zrušiť",
+            cancelStr: "Zrušiť",
+            deletelStr: "Odstrániť",
+            doneStr: "Hotovo",
+            multiDragErrorStr: "Vianásobný Drag &amp; Drop nie je povolený.",
+            extErrorStr: "nie je povolené. Povolené prípony: ",
+            duplicateErrorStr: "nie je povolené. Súbor už existuje.",
+            sizeErrorStr: " nie je povolené. Maximálna povolená veľkosť: ",
+            uploadErrorStr: "Nahrávanie nie je povolené",
+            maxFileCountErrorStr: " nie je povolené. Maximálny povolený počet súborov:",
+            downloadStr: "Stiahnuť",
+            extraHTML: function () {
+                return "<input type='text' name='category' value='@Model.FileUploadCategory' class='hidden' />";
+            },
+            afterUploadAll: function (obj) {
+                //You can get data of the plugin using obj
+                ecImageSelectReload();
+            }
+        });
+
+        $.extend($.lazyLoadXT, {
+            loadEvent: 'pageshow ecLazyLoadEvent',
+            updateEvent: 'load orientationchange resize scroll ecLazyLoadEvent'
+        });
+
+        $(".img-select-div").hide();
+        ecImageSelectReload();
+
+        $(".search-img").on("keyup", function () {
+            var searchval = $(".search-img").val().toLowerCase();
+            $(".img-grid-container img").each(function () {
+                if (searchval == '') {
+                    $(this).closest('div').removeClass('hidden');
+                    return;
+                }
+                if ($(this).attr('title').toLowerCase().indexOf(searchval) >= 0) {
+                    $(this).closest('div').removeClass('hidden');
+                }
+                else {
+                    $(this).closest('div').addClass('hidden');
+                }
+            });
+            ecTriggerImgLazyLoad();
+        });
+    });
+
+    function ecImageSelectClearSelection() {
+        $('.img-grid-container img').removeClass('selected');
+    }
+    function ecImageSelectedUrl() {
+        return $('.img-grid-container img.selected').attr('src');
+    }
+    function ecImageSelectOk() {
+        var imgurl = ecImageSelectedUrl();
+        if (imgurl) {
+            $('input.img-model').val(imgurl);
+            $('img.img-model').attr('src', imgurl);
+        }
+        else {
+            $('input.img-model').val('');
+            $('img.img-model').attr('src', '@Model.EmptyImgUrl');
+        }
+        ecImageSelectFinish();
+    }
+    function ecImageSelectCancel() {
+        ecImageSelectFinish();
+    }
+    function ecImageSelectStart() {
+        ecImageSelectClearSelection();
+        $(".img-model-div").hide();
+        $(".img-select-div").show();
+        ecTriggerImgLazyLoad();
+    }
+    function ecImageSelectFinish() {
+        $(".img-model-div").show();
+        $(".img-select-div").hide();
+        ecImageSelectClearSelection();
+    }
+    function ecImageSelectReload() {
+        var loader = $('.img-grid-loader');
+        loader.show();
+        var param = 'load|@Model.FileUploadCategory';
+        $.ajax('@Url.Content("~/Umbraco/Ecommerce/FileUploadApi/ManageFiles/?id=")' + param, {
+            type: 'POST',
+            success: function (data) {
+                $(".img-grid-container").html(ecImageGridHtml(data));
+                ecImageCreateSlider('@Model.SliderSelector', data);
+                loader.hide();
+                ecImgLazyLoad();
+            },
+            error: function () {
+                loader.hide();
+            }
+        });
+    }
+    function ecImageGridHtml(data) {
+        var html = "";
+        for (i = 0; i < data.length; i++) {
+            html += ecImageCellHtml(data[i]);
+        }
+        return html;
+    }
+    function ecImageCellHtml(img) {
+        return "<div><span>" + img.FileName + "</span><img class='lazy' data-src='" + img.FileUrl + "' onclick='ecImageCellSelect(this); return false;' title='" + img.FileName + "' /></div>";
+    }
+    function ecImageCreateSlider(sliderSelector, data) {
+        if (sliderSelector) {
+            var slider = $(sliderSelector);
+            if (slider.hasClass('slick-initialized')) {
+                slider.slick('unslick');
+            }
+            $(sliderSelector).html(ecImageSliderHtml(data));
+            $(sliderSelector).slick({
+                dots: false,
+                arrows: true,
+                infinite: false,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                pauseOnHover: false,
+                autoplay: false,
+            });
+        }
+    }
+    function ecImageSliderHtml(data) {
+        var html = "";
+        for (i = 0; i < data.length; i++) {
+            html += ecImageCellSliderHtml(data[i]);
+        }
+        return html;
+    }
+    function ecImageCellSliderHtml(img) {
+        return "<div class='slide'><img class='img-responsive' src='" + img.FileUrl + "' alt='" + img.FileName + "' /></div>";
+    }
+    function ecImageCellSelect(e) {
+        ecImageSelectClearSelection();
+        $(e).addClass('selected');
+    }
+    function ecImageDelete() {
+        var param = 'delete|' + ecImageSelectedUrl();
+        $.ajax('@Url.Content("~/Umbraco/Ecommerce/FileUploadApi/ManageFiles/?id=")' + param, {
+            type: 'POST',
+            success: function (data) {
+                ecImageSelectReload();
+            },
+            error: function () {
+                ecImageSelectReload();
+            }
+        });
+    }
+    function ecImgLazyLoad() {
+        $('img.lazy').lazy({ visibleOnly: true, bind: 'event' });
+    }
+    function ecTriggerImgLazyLoad() {
+        $(window).trigger('scroll');
+    }
+</script>

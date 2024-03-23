@@ -1,0 +1,28 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@model Product2CategoryItemsModel
+
+@Html.Action("GetInCategoryFilter", "Product2Category", new { area = "Ecommerce" })
+@{
+    var grid = new WebGrid(null, rowsPerPage: Model.ItemsPerPage, defaultSort: "ProductOrder");
+    grid.Bind(Model.Items, rowCount: Model.TotalItems, autoSortAndPage: false);
+    @grid.GetHtml(
+                    mode: WebGridPagerModes.All,
+                    tableStyle: "webgrid",
+                    headerStyle: "",
+                    footerStyle: "paging",
+                    alternatingRowStyle: "",
+                    columns: grid.Columns(
+                        grid.Column("", "", format: a =>
+                            Html.Raw(
+                            "<span class='tools'>" +
+                            "<a onclick='ecRemoveProduct2Category(\"" + Model.CategoryKey.ToString() + "\",\"" + a.PkProduct.ToString() + "\"); return false' title='Odstrániť produkt z kategórie' class='nowrap'><i class='fa fa-minus-circle'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a onclick='ecMoveUpProduct2Category(\"" + Model.CategoryKey.ToString() + "\",\"" + a.PkProduct.ToString() + "\"); return false' title='Posunúť produkt hore' class='nowrap'><i class='fas fa-long-arrow-alt-up'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a onclick='ecMoveDownProduct2Category(\"" + Model.CategoryKey.ToString() + "\",\"" + a.PkProduct.ToString() + "\"); return false' title='Posunúť produkt dole' class='nowrap'><i class='fas fa-long-arrow-alt-down'></i></a>"
+                            + "</span>")),
+                        grid.Column("ProductOrder", "Poradie", canSort: true),
+                        grid.Column("ProductCode", "Kód", canSort: true),
+                        grid.Column("ProductName", "Názov", canSort: true)
+             ));
+}

@@ -1,0 +1,24 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Models
+@using eshoppgsoftweb.lib.Repositories
+@using eshoppgsoftweb.lib.Util
+@model BasketModel
+
+<div class="ec-category-detail">
+    <div class="title"><h1>OBJEDNÁVKA ČÍSLO @Model.CurrentQuote.QuoteId</h1></div>
+</div>
+
+<div class="container">
+    @Html.Partial("Quote/QuoteDetailHeader", Model.CurrentQuote)
+    @Html.Partial("BasketDetail", Model)
+    <div class="basket-footer-buttons">
+        <div class="row">
+            <div class="col-md-4">
+                <a href="@Url.Content(string.Format("~{0}", Model.CurrentQuote.GetQuoteNotificationUrl()))" class="btn btn-default"><i class='fa fa-envelope'></i> ODOSLAŤ NA E-MAIL</a>
+            </div>
+            <div class="col-md-4">
+                <a href="@Url.Action("GetQuotePdf", "Quote", new { id = Model.CurrentQuote.pk.ToString() })" target="_blank" class="btn btn-default"><i class='fa fa-print'></i> VYTLAČIŤ</a>
+            </div>
+        </div>
+    </div>
+</div>

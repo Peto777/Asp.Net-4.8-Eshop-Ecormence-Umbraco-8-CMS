@@ -1,0 +1,54 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@model ProductPagingListModel
+
+@{
+    string urlInsert = Url.Content("~/moj-ucet/produkty/pridat");
+    string urlUpdate = Url.Content("~/moj-ucet/produkty/upravit");
+    string urlDelete = Url.Content("~/moj-ucet/produkty/odstranit");
+    string urlPrice = Url.Content("~/moj-ucet/produkty/ceny");
+    string urlImages = Url.Content("~/moj-ucet/produkty/obrazky");
+}
+
+<h1>PRODUKTY</h1>
+@Html.Action("GetFilter", "Product", new { area = "Ecommerce" })
+@{
+    var grid = new WebGrid(null, rowsPerPage: Model.ItemsPerPage, defaultSort: "ProductCode");
+    grid.Bind(Model.Items, rowCount: Model.TotalItems, autoSortAndPage: false);
+    @grid.GetHtml(
+                    htmlAttributes: new { @id = "productslist" },
+                    mode: WebGridPagerModes.All,
+                    tableStyle: "webgrid",
+                    headerStyle: "",
+                    footerStyle: "paging",
+                    alternatingRowStyle: "",
+                    columns: grid.Columns(
+                        grid.Column("", "", format: a =>
+                            Html.Raw(
+                            "<span class='tools'>" +
+                            "<a href='" + string.Format("{0}?id={1}", urlUpdate, a.pk.ToString()) + "' title='Upraviť produkt' class='nowrap'><i class='fa fa-edit'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlImages, a.pk.ToString()) + "' title='Obrázky produktu' class='nowrap'><i class='fa fa-camera'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?productId={1}", urlPrice, a.pk.ToString()) + "' title='Ceny produktu' class='nowrap'><i class='fa fa-euro-sign'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlDelete, a.pk.ToString()) + "' title='Odstrániť produkt' class='nowrap'><i class='fa fa-trash'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a onclick='ecMoveUpProduct(\"" + a.pk.ToString() + "\"); return false' title='Posunúť produkt hore' class='nowrap'><i class='fas fa-long-arrow-alt-up'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a onclick='ecMoveDownProduct(\"" + a.pk.ToString() + "\"); return false' title='Posunúť produkt dole' class='nowrap'><i class='fas fa-long-arrow-alt-down'></i></a>"
+                            + "</span>")),
+                        grid.Column("ProductOrder", "Poradie", canSort: true),
+                        grid.Column("ProductIsVisible", "Zobrazovať", canSort: true, format: a => string.Format("{0}", a.ProductIsVisibleText)),
+                        grid.Column("ProductCode", "Kód", canSort: true),
+                        grid.Column("ProductName", "Názov", canSort: true)
+             ));
+
+    <script type="text/javascript">
+        $(function () {
+            $('#productslist thead tr th:first').html(
+                "<a href='@urlInsert' class='btn btn-default' title='Pridať produkt'>Pridať</a>"
+                );
+        });
+    </script>
+
+}

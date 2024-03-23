@@ -1,0 +1,42 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Repositories
+@model PaymentStateListModel
+
+@{
+    string urlInsert = Url.Content("~/moj-ucet/stavy-uhrady/pridat");
+    string urlUpdate = Url.Content("~/moj-ucet/stavy-uhrady/upravit");
+    string urlDelete = Url.Content("~/moj-ucet/stavy-uhrady/odstranit");
+}
+
+<h1>STAVY ÚHRADY</h1>
+@{
+    var grid = new WebGrid(null, rowsPerPage: Model.ItemsPerPage, defaultSort: "WidthFrom");
+    grid.Bind(Model.Items, rowCount: Model.TotalItems, autoSortAndPage: false);
+    @grid.GetHtml(
+                    htmlAttributes: new { @id = "paymentstateslist" },
+                    mode: WebGridPagerModes.All,
+                    tableStyle: "webgrid with-tools",
+                    headerStyle: "",
+                    footerStyle: "paging",
+                    alternatingRowStyle: "",
+                    columns: grid.Columns(
+                        grid.Column("", "", format: a =>
+                            Html.Raw(
+                            "<span class='tools'>" +
+                            "<a href='" + string.Format("{0}?id={1}", urlUpdate, a.pk.ToString()) + "' title='Upraviť' class='nowrap'><i class='fa fa-edit'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlDelete, a.pk.ToString()) + "' title='Odstrániť' class='nowrap'><i class='fa fa-trash'></i></a>"
+                            + "</span>")),
+                        grid.Column("Code", "Kód", canSort: true),
+                        grid.Column("Title", "Názov", canSort: true)
+             ));
+
+    <script type="text/javascript">
+    $(function () {
+        $('#paymentstateslist thead tr th:first').html(
+            "<a href='@urlInsert' class='btn btn-default' title='Pridať'>Pridať</a>"
+            );
+    });
+    </script>
+
+}

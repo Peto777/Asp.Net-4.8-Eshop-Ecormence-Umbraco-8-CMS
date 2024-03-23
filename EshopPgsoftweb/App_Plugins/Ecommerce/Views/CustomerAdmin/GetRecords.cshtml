@@ -1,0 +1,55 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@model CustomerListModel
+
+@{
+    string urlInsert = Url.Content("~/moj-ucet/zakaznici/pridat");
+    string urlUpdate = Url.Content("~/moj-ucet/zakaznici/upravit");
+    string urlDelete = Url.Content("~/moj-ucet/zakaznici/odstranit");
+
+    string urlCustomerUpdate = Url.Content("~/moj-ucet/uzivatelia/upravit");
+    string urlCustomerPassword = Url.Content("~/moj-ucet/uzivatelia/heslo");
+}
+
+<h1>ZÁKAZNÍCI</h1>
+@Html.Action("GetFilter", "CustomerAdmin", new { area = "Ecommerce" })
+
+@{
+    var grid = new WebGrid(null, rowsPerPage: Model.ItemsPerPage, defaultSort: "Name");
+    grid.Bind(Model.Items, rowCount: Model.TotalItems, autoSortAndPage: false);
+    @grid.GetHtml(
+                    htmlAttributes: new { @id = "customerslist" },
+                    mode: WebGridPagerModes.All,
+                    tableStyle: "webgrid",
+                    headerStyle: "",
+                    footerStyle: "paging",
+                    alternatingRowStyle: "",
+                    columns: grid.Columns(
+                        grid.Column("", "", format: a =>
+                            Html.Raw(
+                            "<span class='tools'>" +
+                            "<a href='" + string.Format("{0}?id={1}", urlUpdate, a.pk.ToString()) + "' title='Upraviť zákazníka' class='nowrap'><i class='fa fa-edit'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlDelete, a.pk.ToString()) + "' title='Odstrániť zákazníka' class='nowrap'><i class='fa fa-trash'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}|{2}", urlCustomerUpdate, a.OwnerId.ToString(), eshoppgsoftweb.lib.Util.ParamUtil.IsCustomerEdit) + "' title='Upraviť užívateľa' class='nowrap'><i class='fa fa-user'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}|{2}", urlCustomerPassword, a.OwnerId.ToString(), eshoppgsoftweb.lib.Util.ParamUtil.IsCustomerEdit) + "' title='Heslo užívateľa' class='nowrap'><i class='fas fa-lock'></i></a>"
+                            + "</span>")),
+                        grid.Column("OwnerName", "Užívateľ", canSort: false),
+                        grid.Column("Name", "Meno", canSort: true),
+                        grid.Column("Street", "Ulica", canSort: true),
+                        grid.Column("Zip", "PSČ", canSort: true),
+                        grid.Column("City", "Obec", canSort: true),
+                        grid.Column("Phone", "Telefón", canSort: true),
+                        grid.Column("Email", "Email", canSort: true)
+             ));
+
+    <script type="text/javascript">
+    $(function () {
+        $('#customerslist thead tr th:first').html(
+            "<a href='@urlInsert' class='btn btn-default' title='Pridať zákazníka'>Pridať</a>"
+            );
+    });
+    </script>
+
+}

@@ -1,0 +1,80 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Repositories
+@using dufeksoft.lib.UI
+@model QuoteListModel
+
+@{
+    string urlEdit = Url.Content("~/moj-ucet/objednavky/upravit");
+    string urlDelete = Url.Content("~/moj-ucet/objednavky/odstranit");
+    string urlPrint = Url.Action("GetQuotePdf", "Quote");
+
+    QuoteStateDropDown ddStates = QuoteStateDropDown.CreateFromRepository(false);
+}
+
+@Html.Action("GetFilter", "QuoteAdmin", new { area = "Ecommerce" })
+@{
+    var grid = new WebGrid(null, rowsPerPage: Model.ItemsPerPage);
+    grid.Bind(Model.Items, rowCount: Model.TotalItems, autoSortAndPage: false);
+    @grid.GetHtml(
+                    htmlAttributes: new { @id = "quoteslist" },
+                    mode: WebGridPagerModes.All,
+                    tableStyle: "webgrid with-tools",
+                    headerStyle: "",
+                    footerStyle: "paging",
+                    alternatingRowStyle: "",
+                    columns: grid.Columns(
+                        grid.Column("", "", format: a =>
+                            Html.Raw(
+                            "<span class='tools'>" +
+                            "<a href='" + string.Format("{0}?id={1}", urlEdit, a.pk.ToString()) + "' title='Upraviť objednávku' class='nowrap'><i class='fa fa-edit'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlDelete, a.pk.ToString()) + "' title='Odstrániť objednávku' class='nowrap'><i class='fa fa-trash'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlPrint, a.pk.ToString()) + "' target='_blank' title='Tlač objednávky' class='nowrap'><i class='fa fa-print'></i></a>"
+                            + "</span>")),
+                        grid.Column("QuoteId", "Číslo", canSort: true),
+                        grid.Column("DateFinished", "Vytvorené", canSort: true, format: a => a.DateFinishedView),
+                        grid.Column("QuotePrice", "Cena", canSort: true, format: a => a.QuotePriceWithVatView),
+                        grid.Column("QuoteState", "Stav objednávky", canSort: true, format: a =>
+                            Html.Raw(
+                            "<a href='#' class='nowrap' onclick='naplnspajzuQuoteStateChange(this); return false;' data-quotepk='" + a.pk.ToString() + "' data-quoteid='" + a.QuoteId + "' data-quotedate='" + a.DateFinishedView + "' data-quoteprice='" + a.QuotePriceWithVatView + "'>" + a.QuoteState + "</a>"
+                            )),
+                        grid.Column("InvCity", "Obec", canSort: true),
+                        grid.Column("InvName", "Meno", canSort: true),
+                        grid.Column("QuoteEmail", "E-mail", canSort: true),
+                        grid.Column("QuotePhone", "Telefón", canSort: true)
+             ));
+}
+
+<div>
+    <a href="@Url.Action("GetQuoteListPdf", "QuoteAdmin")" target="_blank" class="btn btn-default"><i class='fa fa-print'></i> VYTLAČIŤ ZOZNAM OBJEDNÁVOK</a>
+    <a href="@Url.Action("GetQuotePcsListPdf", "QuoteAdmin")" target="_blank" class="btn btn-default"><i class='fa fa-print'></i> VYTLAČIŤ ZOZNAM OBJEDNANÝCH PRODUKTOV</a>
+</div>
+
+<div id="modalQuoteStateChangeId" class="modal fade" role="dialog">
+    <div class="modal-dialog quote-modal">
+        <div class="modal-content">
+            <div class="title">Stav objednávky</div>
+            <div>
+                Číslo: <strong><span id="modalQuoteStateChangeId_QuoteId"></span></strong>
+                <br />
+                Zo dňa: <strong><span id="modalQuoteStateChangeId_Date"></span></strong>
+                <br />
+                Cena: <strong><span id="modalQuoteStateChangeId_Price"></span></strong>
+            </div>
+            <div class="buttons">
+                @foreach (CmpDropDownItem item in ddStates)
+                {
+                    <div>
+                        <a class="btn-quote-state" href="#" onclick="naplnspajzuQuoteSetState(this); return false;" data-statekey="@item.DataKey">@item.Name</a>
+                    </div>
+                }
+            </div>
+            <div class="buttons">
+                <a href="#" onclick="ecModalHide('modalQuoteStateChangeId'); return false;">SPÄT</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

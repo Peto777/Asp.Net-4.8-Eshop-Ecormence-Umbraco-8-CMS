@@ -1,0 +1,274 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Repositories
+@using eshoppgsoftweb.lib.Controllers
+@model BasketModel
+@{
+    MembershipUser user = EshoppgsoftwebCustomerCache.IsCustomerAuthenticated ? System.Web.Security.Membership.GetUser() : null;
+    bool isFreeTransportPrice = Model.CurrentQuote.IsFreeTransportPrice;
+}
+
+<div class="container">
+    <div class="basket-header-buttons">
+        <div class="row">
+            <div class="col-md-4">
+                <a href="@Url.Content("~/kosik")" class="header-button">1. SÚHRN OBJEDNÁVKY</a>
+            </div>
+            <div class="col-md-4 col-center">
+                <div class="header-button active">2. FAKTURAČNÉ ÚDAJE</div>
+            </div>
+            <div class="col-md-4">
+                <div class="header-button">3. POTVRDENIE OBJEDNÁVKY</div>
+            </div>
+        </div>
+    </div>
+
+    @if (user == null)
+    {
+        <div class="basket-user-msg top">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>
+                        Nakupovať môžete s registráciou alebo bez nej.
+                    </p>
+                    <p>
+                        <a class="btn btn-primary" href="@Url.Content(string.Format("~/moj-ucet/prihlasenie?returnUrl={0}", new _BaseControllerUtil().CurrentRequest.RawUrl))">Prihlásiť</a>
+                        <a class="btn btn-default" href="@Url.Content("~/nova-registracia")">Zaregistrovať</a>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p>
+                        Ak sa zaregistrujete, nakupujete rýchlejšie a získate viacero výhod. <a href="@Url.Content("~/nova-registracia/vyhody")">Viac o výhodách registrácie zistíte tu.</a>
+                    </p>
+                    <p>
+                        Registrácia je rýchla a bezplatná. <a href="@Url.Content("~/nova-registracia")">Zaregistrovať sa môžete tu.</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+
+
+    @using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.QuoteController>("SubmitBasketDeliveryData", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form style-2">
+            @Html.ValidationSummary(true, "Objednávku sa nepodarilo odoslať. Prosím opravte chyby a skúste to znovu.")
+
+            <div class="row new-section">
+                <div class="col-md-12">
+                    <div class="form-item-hidden">
+                        @Html.TextBoxFor(m => m.CurrentQuote.pk, new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.CurrentQuote.User.pk, new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.CurrentQuote.User.PkQuote, new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.CurrentQuote.User.PkUser, new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.CurrentQuote.User.InvCountry, new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.CurrentQuote.User.DeliveryCountry, new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.TransportTypeKey, new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.PaymentTypeKey, new { @class = "form-control" })
+                    </div>
+                    <div class="form-item">
+                        @Html.CheckBoxFor(m => m.CurrentQuote.User.IsCompanyInvoice, new { @class = "styled style-2 cb-company-data" })
+                        @Html.LabelFor(x => x.CurrentQuote.User.IsCompanyInvoice, new { @class = "strong" })
+                        @Html.ValidationMessageFor(m => m.CurrentQuote.User.IsCompanyInvoice)
+                    </div>
+                </div>
+            </div>
+            <div class="company-data hidden">
+                <div class="title">FIREMNÉ ÚDAJE</div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.CurrentQuote.User.CompanyName)
+                            @Html.TextBoxFor(m => m.CurrentQuote.User.CompanyName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CurrentQuote.User.CompanyName)
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.CurrentQuote.User.CompanyIco)
+                            @Html.TextBoxFor(m => m.CurrentQuote.User.CompanyIco, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CurrentQuote.User.CompanyIco)
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.CurrentQuote.User.CompanyDic)
+                            @Html.TextBoxFor(m => m.CurrentQuote.User.CompanyDic, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CurrentQuote.User.CompanyDic)
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.CurrentQuote.User.CompanyIcdph)
+                            @Html.TextBoxFor(m => m.CurrentQuote.User.CompanyIcdph, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CurrentQuote.User.CompanyIcdph)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="title">FAKTURAČNÁ ADRESA</div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.CurrentQuote.User.InvName)
+                        @Html.TextBoxFor(m => m.CurrentQuote.User.InvName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.CurrentQuote.User.InvName)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.CurrentQuote.User.InvStreet)
+                        @Html.TextBoxFor(m => m.CurrentQuote.User.InvStreet, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.CurrentQuote.User.InvStreet)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.CurrentQuote.User.InvZip)
+                        @Html.TextBoxFor(m => m.CurrentQuote.User.InvZip, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.CurrentQuote.User.InvZip)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.CurrentQuote.User.InvCity)
+                        @Html.TextBoxFor(m => m.CurrentQuote.User.InvCity, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.CurrentQuote.User.InvCity)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.CurrentQuote.User.InvCountryCollectionKey)
+                        @Html.DropDownListFor(m => m.CurrentQuote.User.InvCountryCollectionKey, new SelectList(Model.CurrentQuote.User.DropDowns.CountryCollection, "DataKey", "Name"), new { @class = "form-control chosen-select" })
+                        @Html.ValidationMessageFor(m => m.CurrentQuote.User.InvCountryCollectionKey)
+                    </div>
+                </div>
+            </div>
+            <div class="row new-section">
+                <div class="col-md-12">
+                    <div class="form-item">
+                        @Html.CheckBoxFor(m => m.CurrentQuote.User.IsDeliveryAddress, new { @class = "styled style-2 cb-delivery-address" })
+                        @Html.LabelFor(x => x.CurrentQuote.User.IsDeliveryAddress, new { @class = "strong" })
+                        @Html.ValidationMessageFor(m => m.CurrentQuote.User.IsDeliveryAddress)
+                    </div>
+                </div>
+            </div>
+            <div class="delivery-address hidden">
+                <div class="title">ADRESA DORUČENIA</div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.CurrentQuote.User.DeliveryName)
+                            @Html.TextBoxFor(m => m.CurrentQuote.User.DeliveryName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CurrentQuote.User.DeliveryName)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.CurrentQuote.User.DeliveryStreet)
+                            @Html.TextBoxFor(m => m.CurrentQuote.User.DeliveryStreet, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CurrentQuote.User.DeliveryStreet)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.CurrentQuote.User.DeliveryZip)
+                            @Html.TextBoxFor(m => m.CurrentQuote.User.DeliveryZip, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CurrentQuote.User.DeliveryZip)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.CurrentQuote.User.DeliveryCity)
+                            @Html.TextBoxFor(m => m.CurrentQuote.User.DeliveryCity, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CurrentQuote.User.DeliveryCity)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.CurrentQuote.User.DeliveryCountryCollectionKey)
+                            @Html.DropDownListFor(m => m.CurrentQuote.User.DeliveryCountryCollectionKey, new SelectList(Model.CurrentQuote.User.DropDowns.CountryCollection, "DataKey", "Name"), new { @class = "form-control chosen-select" })
+                            @Html.ValidationMessageFor(m => m.CurrentQuote.User.DeliveryCountryCollectionKey)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.CurrentQuote.User.QuotePhone)
+                        @Html.TextBoxFor(m => m.CurrentQuote.User.QuotePhone, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.CurrentQuote.User.QuotePhone)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.CurrentQuote.User.QuoteEmail)
+                        @Html.TextBoxFor(m => m.CurrentQuote.User.QuoteEmail, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.CurrentQuote.User.QuoteEmail)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row new-section">
+                <div class="col-md-6">
+                    <div class="cb-list">
+                        <div class="title">SPÔSOB PLATBY</div>
+                        @{
+                            PaymentTypeModel selectedPaymentType = Model.GetSelectedPaymentType();
+                            foreach (PaymentTypeModel payment in Model.PaymentTypeCollection.Items)
+                            {
+                                <div class="cb-item">
+                                    <input @string.Format("{0}", selectedPaymentType.pk == payment.pk ? "checked='checked'" : "") type="radio" class="styled style-2" id="payment-@payment.pk" name="qrb-payment-type" value="@payment.pk" />
+                                    <label for="payment-@payment.pk">@payment.Name <span>@string.Format("({0})", isFreeTransportPrice ? "0 €" : payment.PriceWithCurrency)</span></label>
+                                    @if (!string.IsNullOrEmpty(payment.GatewayTypeImg))
+                                    {
+                                        <img class="basket-payment-type-img" src="@Url.Content(string.Format("~{0}", payment.GatewayTypeImg))" alt="@payment.GatewayTypeName" />
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                    @Html.ValidationMessageFor(m => m.PaymentTypeKey)
+                </div>
+                <div class="col-md-6">
+                    <div class="cb-list">
+                        <div class="title">SPÔSOB DODANIA</div>
+                        @{
+                            TransportTypeModel selectedTransportType = Model.GetSelectedTransportType();
+                            foreach (TransportTypeModel transport in Model.TransportTypeCollection.Items)
+                            {
+                                <div class="cb-item">
+                                    <input @string.Format("{0}", selectedTransportType.pk == transport.pk ? "checked='checked'" : "") type="radio" class="styled style-2" id="transport-@transport.pk" name="qrb-transport-type" value="@transport.pk" />
+                                    <label for="transport-@transport.pk">@transport.Name <span class="pricecalc-transport">@string.Format("({0})", isFreeTransportPrice ? "0 €" : transport.PriceWithCurrency)</span></label>
+                                </div>
+                            }
+                        }
+                    </div>
+                    @Html.ValidationMessageFor(m => m.TransportTypeKey)
+                </div>
+            </div>
+
+            <div class="row new-section">
+                <div class="col-md-12">
+                    <div class="form-item">
+                        @Html.LabelFor(m => m.CurrentQuote.User.Note)
+                        @Html.TextAreaFor(m => m.CurrentQuote.User.Note, new { @class = "form-control", style = "height:100px", placeholder = "Text..." })
+                        @Html.ValidationMessageFor(m => m.CurrentQuote.User.Note)
+                    </div>
+                </div>
+            </div>
+
+            <div class="basket-footer-buttons">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="@Url.Content("~/kosik")" class="btn btn-default">< SPÄŤ NA KOŠÍK</a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="#" onclick="ecSubmitBasketDeliveryData('submitBasketDeliveryDataButton', 'qrb-transport-type', 'TransportTypeKey', 'qrb-payment-type', 'PaymentTypeKey'); return false;" class="btn btn-primary">PREJSŤ NA POTVRDENIE OBJEDNÁVKY ></a>
+                        <input type="submit" id="submitBasketDeliveryDataButton" class="hidden" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

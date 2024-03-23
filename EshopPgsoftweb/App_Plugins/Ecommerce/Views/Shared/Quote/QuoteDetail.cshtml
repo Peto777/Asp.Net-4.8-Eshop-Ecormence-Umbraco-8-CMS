@@ -1,0 +1,150 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@model QuoteModel
+
+<div class="basket-review-address">
+    <div class="row new-section">
+        <div class="col-md-4">
+            <p>
+                Adresa pre doručenie:
+            </p>
+            <p>
+                @Model.User.TextToHtml(Model.User.GetDeliveryAddress())
+            </p>
+            <p>
+                @Model.User.QuotePhone
+                <br />
+                @Model.User.QuoteEmail
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                Fakturačná adresa:
+            </p>
+            <p>
+                @Model.User.TextToHtml(Model.User.GetInvoiceAddress())
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                Firemné údaje:
+            </p>
+            @if (Model.User.IsCompanyInvoice)
+            {
+                <p>
+                    @Model.User.CompanyName
+                    <br />
+                    IČO: @Model.User.CompanyIco
+                    <br />
+                    DIČ: @Model.User.CompanyDic
+                    <br />
+                    IČ DPH: @Model.User.CompanyIcdph
+                </p>
+            }
+        </div>
+    </div>
+    <div class="row new-section">
+        <div class="col-md-4">
+            <p>
+                Spôsob dodania:
+                <br />
+                @Html.Raw(Model.GetTransportTypeName())
+            </p>
+            <p>
+                Platba:
+                <br />
+                @Html.Raw(Model.GetPaymentTypeName())
+            </p>
+        </div>
+        <div class="col-md-8">
+            <p>
+                Poznámka:
+            </p>
+            <p>
+                @Model.User.TextToHtml(Model.User.Note)
+            </p>
+        </div>
+    </div>
+</div>
+<div class="basket-items-header">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-11">
+            <div class="row">
+                <div class="col-md-6 left">PRODUKT</div>
+                <div class="col-md-2 left">KÓD</div>
+                <div class="col-md-1">CENA</div>
+                <div class="col-md-1 left">MJ</div>
+                <div class="col-md-1 left">MNOŽSTVO</div>
+                <div class="col-md-1">SPOLU</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@foreach (Product2QuoteModel product in Model.Items)
+{
+    var productId = product.PkProduct;
+    <div class="basket-product-item" id="pc-@productId">
+        <div class="row">
+            <div class="col-md-1 col-xs-5 product-img">
+                @if (!string.IsNullOrEmpty(product.ProductImg))
+                {
+                    <a href="@product.Url"><img src="@product.ProductImg" alt="@product.ProductName" class="img-responsive" /></a>
+                }
+            </div>
+            <div class="col-md-11 col-xs-7">
+                <div class="row">
+                    <div class="col-md-6">
+                        @if (string.IsNullOrEmpty(product.Url))
+                        {
+                            <span>@product.ProductName</span>
+                        }
+                        else
+                        {
+                            <a class="lnk-detail" target="_blank" href="@product.Url">@product.ProductName</a>
+                        }
+                    </div>
+                    <div class="col-md-2">
+                        @if (product.IsProductItem)
+                        {
+                            <span class="pip-label">KÓD:</span>
+                            <span class="pip-value">@product.ItemCode</span>
+                        }
+                    </div>
+                    <div class="col-md-1 price">
+                        @if (product.IsProductItem)
+                        {
+                            <span class="pip-label">CENA:</span>
+                            <span class="pip-value">@product.BasePriceWithCurrencyWithVat</span>
+                        }
+                    </div>
+                    <div class="col-md-1">
+                        @if (product.IsProductItem)
+                        {
+                            <span class="pip-label">MJ:</span>
+                            <span class="pip-value">@product.UnitName</span>
+                        }
+                    </div>
+                    <div class="col-md-1">
+                        @if (product.IsProductItem)
+                        {
+                            <span class="pip-label">MNOŽSTVO:</span>
+                            <span class="pip-value">@product.ItemPcs</span>
+                        }
+                    </div>
+                    <div class="col-md-1 price">
+                        <span class="pip-label">SPOLU:</span>
+                        <span class="pip-value"><strong><span class="with-vat">@product.TotalPriceWithCurrencyWithVat</span></strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="basket-total-price with-vat">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-9 col-xs-6">SPOLU</div>
+        <div class="col-md-2 col-xs-6 price">@Model.TotalPriceWithVatWithCurrency</div>
+    </div>
+</div>

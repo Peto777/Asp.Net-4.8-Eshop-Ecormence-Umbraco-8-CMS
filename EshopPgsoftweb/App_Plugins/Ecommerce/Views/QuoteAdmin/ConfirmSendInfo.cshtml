@@ -1,0 +1,80 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.QuoteSendInfoModel
+
+@{
+    string urlBack = string.Format("{0}?id={1}", Url.Content("~/moj-ucet/objednavky/upravit"), Model.pk);
+}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+    <li class="active"><a href="#quote-info" role="tab" data-toggle="tab">Info pre zákazníka</a></li>
+    <li><a href="#quote-detail" role="tab" data-toggle="tab">Objednávka</a></li>
+</ul>
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane active" id="quote-info">
+        @{
+            using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.QuoteAdminController>("SendInfo", null, new { @class = "form-horizontal", role = "form" }))
+            {
+                <div class="naplnspajzu-form">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.Partial("Ecommerce/_ModelError", Model.ModelErrors)
+                            @Html.AntiForgeryToken()
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @if (Model.SendOk)
+                            {
+                                <p class="big">Informácie boli úspešne odoslané.</p>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-item-hidden">
+                                @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @if (Model.SendOk)
+                            {
+                                <div class="form-item">
+                                    @Html.LabelFor(x => x.Note)
+                                    @Html.TextAreaFor(m => m.Note, new { @class = "form-control", @readonly = "readonly", style = "height:200px" })
+                                    @Html.ValidationMessageFor(m => m.Note)
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-item">
+                                    @Html.LabelFor(x => x.Note)
+                                    @Html.TextAreaFor(m => m.Note, new { @class = "form-control", style = "height:200px" })
+                                    @Html.ValidationMessageFor(m => m.Note)
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                    <div class="row new-section">
+                        <div class="col-md-12">
+                            <a href="@urlBack" class="btn btn-default btn-lg"><i class="fa fa-long-arrow-left"></i> Späť na objednávku</a>
+                            @if (!Model.SendOk)
+                            {
+                                <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg"><i class="fa fa-send"></i> Odoslať info zákazníkovi</a>
+                                <input type="submit" id="submitButton" class="hidden" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <div class="tab-pane" id="quote-detail">
+        @Html.Partial("Quote/QuoteDetailHeader", Model.Quote)
+        @Html.Partial("Quote/QuoteDetail", Model.Quote)
+    </div>
+</div>
+

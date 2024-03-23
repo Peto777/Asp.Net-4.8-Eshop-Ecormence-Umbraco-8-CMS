@@ -1,0 +1,49 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.ProductInCategoryFilterModel
+
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.Product2CategoryController>("SaveInCategoryFilter", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            <fieldset>
+                <legend>Filter</legend>
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.Partial("Ecommerce/_ModelError", Model.ModelErrors)
+                        @Html.AntiForgeryToken()
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-item-hidden">
+                            @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.TextBoxFor(m => m.UserId, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.TextBoxFor(m => m.SessionId, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.TextBoxFor(m => m.PropId, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.TextBoxFor(m => m.PkCategory, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.ProductCode)
+                            @Html.TextBoxFor(m => m.ProductCode, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.ProductCode)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.SearchText)
+                            @Html.TextBoxFor(m => m.SearchText, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.SearchText)
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-item">
+                            <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Načítať</a>
+                            <input type="submit" id="submitButton" class="hidden" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    }
+}

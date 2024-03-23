@@ -1,0 +1,91 @@
+﻿@model MainNavigationModel
+
+@using eshoppgsoftweb.lib.Models
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Util
+
+<nav class="menu-bar navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header mobile-only">
+            <button id="mobile-menu-button" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <div class="navbar-header">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </div>
+                <div class="navbar-close hidden">
+                    <span class="glyphicon glyphicon-remove"></span>
+                </div>
+            </button>
+            <div class="mobile-tools">
+                <div class="tool-item">
+                    <a href="@Url.Content("~/")"><i class="fa fa-fw fa-home"></i></a>
+                </div>
+                <div class="tool-item">
+                    <a href="@Url.Content("~/info-o-donaske")"><i class="fa fa-fw fa-info"></i></a>
+                </div>
+                <div class="tool-item">
+                    <a href="@ConfigurationUtil.EshopRootUrl" class="menu-item-search"><i class="fa fa-fw fa-search"></i></a>
+                </div>
+                <div class="tool-item">
+                    <a href="@Url.Content("~/kosik")"><i class="fa fa-fw fa-shopping-cart"></i><span class="header-basket-pcs">0</span></a>
+                </div>
+                <div class="tool-item">
+                    <a href="@Url.Content("~/moj-ucet")"><i class="fa fa-fw fa-user"></i></a>
+                </div>
+            </div>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="desktop-only"><a href="@Url.Content("~/")" title="Úvod"><i class="fa fa-home"></i></a></li>
+                <li class="desktop-only"><a href="@ConfigurationUtil.EshopRootUrl" title="Vyhľadať produkt" class="menu-item-search"><i class="fa fa-search"></i></a></li>
+                <li class="desktop-only"><a href="@ConfigurationUtil.EshopRootUrl" title="Všetky produkty"><i class="fa fa-store-alt"></i></a></li>
+                <li class="desktop-only"><a href="@Url.Content("~/e-shop/oblubene")" title="Obľúbené produkty"><i class="fa fa-heart"></i></a></li>
+                <li class="mobile-only"><a href="@ConfigurationUtil.EshopRootUrl">Všetky produkty</a></li>
+                <li class="mobile-only"><a href="@Url.Content("~/e-shop/oblubene")">Obľúbené produkty</a></li>
+                @foreach (CategoryModel category in Model.Eshop.CategoryTreeData.Root.Children)
+                {
+                    if (category.CategoryIsVisible)
+                    {
+                        if (category.HasChildren)
+                        {
+                            string menuid = Guid.NewGuid().ToString();
+                            <li class="dropdown">
+                                <a class="mobile-submenu-parent" href="@category.Url">@category.CategoryName</a>
+                                <a class="mobile-submenu-caret" href="#@menuid" data-toggle="collapse" aria-expanded="true"><i class="fa fa-caret-down fa-fw"></i></a>
+                                <ul class="dropdown-menu desktop-only">
+                                    @foreach (CategoryModel child in category.Children)
+                                    {
+                                        if (child.CategoryIsVisible)
+                                        {
+                                            <li><a href="@child.Url">@child.CategoryName</a></li>
+                                        }
+                                    }
+                                </ul>
+                                <ul id="@menuid" class="mobile-submenu mobile-only collapse" aria-expanded="false">
+                                    @foreach (CategoryModel child in category.Children)
+                                    {
+                                        if (child.CategoryIsVisible)
+                                        {
+                                            <li><a href="@child.Url">@child.CategoryName</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a href="@category.Url">@category.CategoryName</a>
+                            </li>
+                        }
+                    }
+                }
+                <li class="fixed-menu-tool">
+                    <a href="@Url.Content("~/kosik")"><i class="fa fa-fw fa-shopping-cart"></i><span class="header-basket-pcs">0</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

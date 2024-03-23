@@ -1,0 +1,43 @@
+﻿@model CategoryPublicModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+
+@if (Model.CategoryData == null)
+{
+    <div class="message-div">
+        <h1>Kategória nenájdená</h1>
+        <p>
+            Požadovaná produktová kategória sa v ponuke nášho e-shopu nenachádza.
+        </p>
+    </div>
+}
+else
+{
+    @Html.Partial("CategoryDetailHeader", Model)
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Partial("CategoryPublic/CategoryDetailMenu", Model)
+            </div>
+            <div class="col-md-10">
+                @if (Model.Products == null)
+                {
+                    @Html.Partial("CategoryDetailSearch", Model)
+                }
+                else
+                {
+                    <div class="category-detail-search hidden">
+                        <div class="search-close">
+                            <span>Vyhľadávanie v zozname všetkých produktov</span>
+                            <a href="#" onclick="ecProductSearchClose(); return false;" title="Zatvoriť vyhľadávanie">x</a>
+                        </div>
+                        @Html.Partial("CategoryDetailSearch", Model)
+                    </div>
+                    <div class="category-detail-products">
+                        @Html.Partial("CategoryDetailProducts", Model)
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+

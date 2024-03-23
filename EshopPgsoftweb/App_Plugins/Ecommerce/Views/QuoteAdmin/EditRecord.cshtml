@@ -1,0 +1,40 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Util
+@model QuoteEditModel
+
+@{
+    string urlSendInfo = string.Format("{0}?id={1}", Url.Content("~/moj-ucet/objednavky/upravit/odoslat-info"), Model.QuoteId);
+    string urlPrint = Url.Action("GetQuotePdf", "Quote", new { id = Model.QuoteId.ToString() });
+    string urlMksoft = Url.Action("GetQuoteMksoftXml", "QuoteExport", new { id = Model.QuoteId.ToString() });
+}
+
+<div class="toolbar-tile">
+    <a href="@urlSendInfo" class="toolbar-btn"><i class='fa fa-envelope'></i> Odoslať e-mailom ...</a>
+    <a href="@urlPrint" class="toolbar-btn" target="_blank"><i class='fa fa-print'></i> Vytlačiť</a>
+    <a href="@urlMksoft" class="toolbar-btn"><i class='fa fa-file-export'></i> Export pre MK soft</a>
+</div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="@Model.TabStateActive"><a href="#quote-state" role="tab" data-toggle="tab">Stav</a></li>
+                <li class="@Model.TabUserActive"><a href="#quote-contact" role="tab" data-toggle="tab">Fakturačné údaje</a></li>
+                <li class="@Model.TabItemsActive"><a href="#quote-items" role="tab" data-toggle="tab">Položky</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane @Model.TabStateActive" id="quote-state">
+                    @Html.Action("EditState", "QuoteAdmin", new { area = "Ecommerce", id = Model.QuoteId })
+                </div>
+                <div class="tab-pane @Model.TabUserActive" id="quote-contact">
+                    @Html.Action("EditUser", "QuoteAdmin", new { area = "Ecommerce", id = Model.QuoteId })
+                </div>
+                <div class="tab-pane @Model.TabItemsActive" id="quote-items">
+                    @Html.Action("GetRecords", "QuoteAdminProduct", new { area = "Ecommerce", id = Model.QuoteId })
+                </div>
+            </div>
+        </div>
+    </div>
+

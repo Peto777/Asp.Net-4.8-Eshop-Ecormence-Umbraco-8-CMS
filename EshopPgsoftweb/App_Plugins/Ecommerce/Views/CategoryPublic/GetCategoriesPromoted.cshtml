@@ -1,0 +1,24 @@
+﻿@model CategoryModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+
+<div class="category-list">
+    @if (Model.Children.Count > 0)
+    {
+        <div class="category-list-img @string.Format("cnt-{0}", Model.Children.Count)">
+            <div class="row">
+                @for (int idx = 0; idx < Model.Children.Count; idx++)
+                {
+                    <div class="col-md-3">
+                        @Html.Partial("CategoryPublic/CategoryItem", Model.Children[idx])
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="message-div">
+            <p>Žiadne kategórie na zobrazenie.</p>
+        </div>
+    }
+</div>

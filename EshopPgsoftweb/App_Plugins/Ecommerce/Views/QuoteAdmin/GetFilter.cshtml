@@ -1,0 +1,80 @@
+﻿@model QuoteListFilterModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.QuoteAdminController>("SaveFilter", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            <fieldset>
+                <legend>Filter</legend>
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.AntiForgeryToken()
+                        <div class="form-item-hidden">
+                            @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.TextBoxFor(m => m.UserId, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.TextBoxFor(m => m.SessionId, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.TextBoxFor(m => m.PropId, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.QuoteId)
+                            @Html.TextBoxFor(m => m.QuoteId, new { @class = "form-control", placeholder = "", tabindex = 1 })
+                            @Html.ValidationMessageFor(m => m.QuoteId)
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.SearchText)
+                            @Html.TextBoxFor(m => m.SearchText, new { @class = "form-control", placeholder = "", tabindex = 2 })
+                            @Html.ValidationMessageFor(m => m.SearchText)
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.From)
+                            @Html.TextBoxFor(m => m.From, new { @class = "form-control skdate" })
+                            @Html.ValidationMessageFor(m => m.From)
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-item">
+                            @Html.LabelFor(x => x.To)
+                            @Html.TextBoxFor(m => m.To, new { @class = "form-control skdate" })
+                            @Html.ValidationMessageFor(m => m.To)
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-item">
+                            <label>Stav objednávky</label>
+                        </div>
+                        @foreach (QuoteStateItemModel state in Model.AllQuoteStates.Items)
+                        {
+                            <div>
+                                @if (Model.IsQuoteStateChecked(state))
+                                {
+                                    <input id="@state.Name" name="QuoteStates" type="checkbox" value="@state.Name" class="styled" checked="checked" />
+                                }
+                                else
+                                {
+                                    <input id="@state.Name" name="QuoteStates" type="checkbox" value="@state.Name" class="styled" />
+                                }
+                                <label for="@state.Name">@state.Name</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-item">
+                            @Html.Partial("Ecommerce/_ModelError", Model.ModelErrors)
+                            <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg" tabindex="3">Načítať</a>
+                            <input type="submit" id="submitButton" class="hidden" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    }
+}

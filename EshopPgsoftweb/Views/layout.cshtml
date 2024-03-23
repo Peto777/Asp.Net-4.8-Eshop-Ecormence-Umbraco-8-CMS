@@ -1,0 +1,31 @@
+﻿@inherits UmbracoViewPage
+<!DOCTYPE html>
+<html lang="sk">
+@Html.Partial("Layout/_HtmlHead")
+<body>
+    @Html.Partial("Layout/_Header")
+    <div class="page-body">
+        @RenderBody()
+    </div>
+    @Html.Partial("Layout/_Footer")
+    @Html.Partial("Layout/_Cookies")
+    @Html.Partial("Ecommerce/_InfoMessages")
+
+    <a href="#" class="scrollToTop"><i class="fa fa-caret-up"></i></a>
+
+
+    @Html.Partial("Layout/_HtmlScripts")
+
+    @if (System.Configuration.ConfigurationManager.AppSettings["hiddenWeb"] == "true")
+    {
+        <div class="hidden-web">
+            <div class="container">
+                <div class="message-div">
+                    <img class="img-responsive" src="@Url.Content("~/")" />
+                    <h1>Začíname čoskoro ...</h1>
+                </div>
+            </div>
+        </div>
+    }
+</body>
+</html>

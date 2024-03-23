@@ -1,0 +1,31 @@
+﻿@model ProductPublicModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Repositories
+
+@if (!string.IsNullOrEmpty(Model.ProductData.ProductImg) || Model.ProductImages.Items.Count > 0)
+{
+    <div class="slider">
+        <a href="#" class="control_next">></a>
+        <a href="#" class="control_prev"><</a>
+        <ul>
+            @if (!string.IsNullOrEmpty(Model.ProductData.ProductImg))
+            {
+                <li><img class="img-product-detail" src="@Url.Content(string.Format("~{0}", Model.ProductData.ProductImg))" alt="@Model.ProductData.ProductName" /></li>
+            }
+            @foreach (FileUploadInfo file in Model.ProductImages.Items)
+            {
+                if (file.FileUrl != Model.ProductData.ProductImg)
+                {
+                    <li><img class="img-product-detail" src="@Url.Content(string.Format("~{0}", file.FileUrl))" alt="@file.FileName" /></li>
+                }
+            }
+        </ul>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            eshoppgsoftwebSlider();
+        });
+    </script>
+}
+

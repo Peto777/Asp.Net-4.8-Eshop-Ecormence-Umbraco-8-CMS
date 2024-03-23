@@ -1,0 +1,32 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.EshoppgsoftwebMemberModel
+
+<h1>Prajete si skutočne odstrániť vybraného užívateľa?</h1>
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.MemberController>("DeleteRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-item-hidden">
+                        @Html.TextBoxFor(m => m.MemberId, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.Name)
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.Name)
+                    </div>
+                </div>
+            </div>
+
+            @Html.ValidationSummary(true)
+            <div class="row new-section">
+                <div class="col-md-12">
+                    <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Odstrániť</a>
+                    <a href="@Url.Content("~/moj-ucet/uzivatelia")" class="btn btn-default btn-lg">Späť</a>
+                    <input type="submit" id="submitButton" class="hidden" />
+                </div>
+            </div>
+        </div>
+    }
+}

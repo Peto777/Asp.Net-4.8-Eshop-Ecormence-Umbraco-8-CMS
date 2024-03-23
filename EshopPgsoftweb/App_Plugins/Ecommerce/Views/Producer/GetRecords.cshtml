@@ -1,0 +1,42 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@model ProducerPagingListModel
+
+@{
+    string urlInsert = Url.Content("~/moj-ucet/vyrobcovia/pridat");
+    string urlUpdate = Url.Content("~/moj-ucet/vyrobcovia/upravit");
+    string urlDelete = Url.Content("~/moj-ucet/vyrobcovia/odstranit");
+}
+
+<h1>VÝROBCOVIA</h1>
+@Html.Action("GetFilter", "Producer", new { area = "Ecommerce" })
+@{
+    var grid = new WebGrid(null, rowsPerPage: Model.ItemsPerPage, defaultSort: "ProducerName");
+    grid.Bind(Model.Items, rowCount: Model.TotalItems, autoSortAndPage: false);
+    @grid.GetHtml(
+                    htmlAttributes: new { @id = "producerslist" },
+                    mode: WebGridPagerModes.All,
+                    tableStyle: "webgrid",
+                    headerStyle: "",
+                    footerStyle: "paging",
+                    alternatingRowStyle: "",
+                    columns: grid.Columns(
+                        grid.Column("", "", format: a =>
+                            Html.Raw(
+                            "<span class='tools'>" +
+                            "<a href='" + string.Format("{0}?id={1}", urlUpdate, a.pk.ToString()) + "' title='Upraviť výrobcu' class='nowrap'><i class='fa fa-edit'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlDelete, a.pk.ToString()) + "' title='Odstrániť výrobcu' class='nowrap'><i class='fa fa-trash'></i></a>"
+                            + "</span>")),
+                        grid.Column("ProducerName", "Názov", canSort: true),
+                        grid.Column("ProducerWeb", "Web", canSort: true)
+             ));
+
+    <script type="text/javascript">
+        $(function () {
+            $('#producerslist thead tr th:first').html(
+                "<a href='@urlInsert' class='btn btn-default' title='Pridať výrobcu'>Pridať</a>"
+                );
+        });
+    </script>
+
+}

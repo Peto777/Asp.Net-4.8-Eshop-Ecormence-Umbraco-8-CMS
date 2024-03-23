@@ -1,0 +1,31 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Util
+@model QuoteModel
+
+
+<div class="quote-detail-header">
+    <div class="quote-item">
+        Objednávka číslo: <strong>@Model.QuoteId</strong>
+    </div>
+    <div class="quote-item">
+        Zo dňa: <strong>@Model.DateFinishedView</strong>
+    </div>
+    <div class="quote-item">
+        Stav: <strong>@Model.QuoteState</strong>
+    </div>
+    @if (string.IsNullOrEmpty(Model.QuotePriceState) && Model.QuoteState == ConfigurationUtil.InitialQuoteState())
+    {
+        <div class="quote-item">
+            <a href="@string.Format("{0}?id={1}", Url.Content("~/kosik/platba-kartou"), Model.pk.ToString())" class="btn-header">Zaplatiť @Model.TotalPriceWithVatWithCurrency kartou</a>
+        </div>
+    }
+    else
+    {
+        if (!string.IsNullOrEmpty(Model.QuotePriceState))
+        {
+            <div class="quote-item">
+                Stav úhrady: <strong>@Model.QuotePriceState</strong>
+            </div>
+        }
+    }
+</div>

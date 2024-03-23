@@ -1,0 +1,2 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@Html.Action("GetProductsPromoted", "CategoryPublic", new { area = "Ecommerce", id = Model.MacroParameters["categoryPromoCode"].ToString() })

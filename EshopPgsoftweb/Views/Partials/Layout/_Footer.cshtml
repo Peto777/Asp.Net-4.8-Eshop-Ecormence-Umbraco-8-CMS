@@ -1,0 +1,67 @@
+﻿@inherits _EshoppgsoftwebViewPage
+@using eshoppgsoftweb.lib.Models
+@using eshoppgsoftweb.lib.Models.UmbracoCmsContent
+@using eshoppgsoftweb.lib.Repositories.UmbracoCmsContent
+@using eshoppgsoftweb.lib.Util
+
+@{
+    Texty texty = TextyRepository.GetFromUmbraco(Umbraco);
+}
+
+<footer class="footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="footer-text-section">
+                    <p>INFOLINKA</p>
+                    <p>
+                        <a href="tel:@texty.EshoPgsoftwebTelefon">@texty.EshoPgsoftwebTelefon</a>
+                        <br />
+                        <a href="mailto:@texty.EshopPgsoftwebEmail">@texty.EshopPgsoftwebEmail</a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="footer-text-section">
+                    <p>O SPOLOČNOSTI</p>
+                    <ul class="menu">
+                        <li><a href="@Url.Content("~/kontakt")">Kontakt</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="footer-text-section">
+                    <p>ZÁKAZNÍCKA ZÓNA</p>
+                    <ul class="menu">
+                        <li><a href="@ConfigurationUtil.EshopRootUrl">Eshop</a></li>
+                        <li><a href="@Url.Content("~/info-o-donaske")">Informácie o doručení</a></li>
+                        <li><a href="@Url.Content("~/kamenna-predajna")">Kamenná predajňa</a></li>
+                        <li><a href="@Url.Content("~/obchodne-podmienky")">Obchodné podmienky</a></li>
+                        <li><a href="@Url.Content("~/reklamacny-poriadok")">Reklamačný poriadok</a></li>
+                        <li><a href="@Url.Content("~/gdpr")" target="_blank">Zásady ochrany osobných údajov </a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="footer-text-section">
+                    <p>SOCIÁLNE SIETE</p>
+                    <div class="content-social">
+                        <a class="square-icon" href="https://www.facebook.com/" target="_blank" title="Facebook"><i class="fab fa-facebook fa-fw"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="copy-bar">
+            <div class="copyright">
+                &copy; <a href="@Url.Content("~/umbraco")">gloziksoft.sk</a> 2022 - @DateTime.Today.Year.ToString(), všetky práva na obsah vyhradené
+            </div>
+            <div class="developer">
+                <a href="https://www.gloziksoft.sk/sk" target="_blank">GLOZIKSOFT</a> - <a href="https://www.gloziksoft.sk" target="_blank">tvorba webových stránok</a>, <a href="https://www.gloziksoft.sk" target="_blank">tvorba e-shopov</a>
+            </div>
+            <div class="logo">
+                <img class="img-responsive" src="@Url.Content("~/Styles/images/pgsoftweb-logo-footer.png")" alt="Eshop Pgsoftweb" />
+            </div>
+        </div>
+    </div>
+</footer>

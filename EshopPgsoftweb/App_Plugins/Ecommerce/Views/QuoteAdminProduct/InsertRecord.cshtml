@@ -1,0 +1,54 @@
+﻿@model InsertProduct2QuoteModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+
+<h1>NOVÁ POLOŽKA OBJEDNÁVKY</h1>
+
+<div class="quote-product-search">
+    <input id="quoteProductSearch" name="quoteProductSearch" class="form-control" placeholder="Vyhľadať produkt ..." />
+    <i id="spinQuoteProductSearch" class="fa fa-spinner fa-spin hidden"></i>
+</div>
+
+
+@{
+    using (Html.BeginUmbracoForm<naplnspajzu.lib.Controllers.Ecommerce.QuoteAdminProductController>("SaveNewRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "Údaje sa nepodarilo uložiť. Prosím opravte chyby a skúste to znovu.")
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-item-hidden">
+                        @Html.TextBoxFor(m => m.PkQuote, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.PkProduct, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ItemCode)
+                        @Html.TextBoxFor(m => m.ItemCode, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.ItemCode)
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ItemName)
+                        @Html.TextBoxFor(m => m.ItemName, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.ItemName)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-item item-pcs hidden">
+                        <label></label>
+                        @Html.TextBoxFor(m => m.ItemPcs, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ItemPcs)
+                    </div>
+                </div>
+            </div>
+            <div class="row new-section">
+                <div class="col-md-12">
+                    <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Zapísať</a>
+                    <a href="@Url.Content(string.Format("~/moj-ucet/objednavky/upravit?id={0}&tab={1}", Model.PkQuote, QuoteEditModel.TabItemsId))" class="btn btn-default btn-lg">Späť</a>
+                    <input type="submit" id="submitButton" class="hidden" />
+                </div>
+            </div>
+        </div>
+    }
+}

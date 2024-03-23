@@ -1,0 +1,189 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.CustomerModel
+
+<h1>ZÁKAZNÍK</h1>
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.CustomerAdminController>("SaveRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+<div class="naplnspajzu-form">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "Údaje sa nepodarilo zapísať. Prosím opravte chyby a skúste to znovu.")
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-item-hidden">
+                @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.CountryKey, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.CountryName, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.DeliveryCountryKey, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.DeliveryCountryName, new { @class = "form-control", @readonly = "readonly" })
+                @if (!Model.IsNew)
+                {
+                    @Html.DropDownListFor(m => m.OwnerCollectionId, new SelectList(Model.DropDowns.MemberCollection, "Id", "Name"), new { @class = "form-control chosen-select" })
+                }
+            </div>
+            <div class="form-item">
+                @Html.LabelFor(x => x.OwnerCollectionId)
+                @if (Model.IsNew)
+                {
+                    @Html.DropDownListFor(m => m.OwnerCollectionId, new SelectList(Model.DropDowns.MemberCollection, "Id", "Name"), new { @class = "form-control chosen-select" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(m => m.OwnerName, new { @class = "form-control", @readonly = "readonly" })
+                }
+                @Html.ValidationMessageFor(m => m.OwnerCollectionId)
+            </div>
+        </div>
+    </div>
+
+    <div class="title">KONTAKTNÉ ÚDAJE</div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-item">
+                @Html.LabelFor(x => x.Name, new { @class = "required" })
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Name)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-item">
+                @Html.LabelFor(x => x.CountryCollectionKey, new { @class = "required" })
+                @Html.DropDownListFor(m => m.CountryCollectionKey, new SelectList(Model.DropDowns.CountryCollection, "DataKey", "Name"), new { @class = "form-control chosen-select" })
+                @Html.ValidationMessageFor(m => m.CountryCollectionKey)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-item">
+                @Html.LabelFor(x => x.Street, new { @class = "required" })
+                @Html.TextBoxFor(m => m.Street, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Street)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-item">
+                @Html.LabelFor(x => x.City, new { @class = "required" })
+                @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.City)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-item">
+                @Html.LabelFor(x => x.Zip, new { @class = "required" })
+                @Html.TextBoxFor(m => m.Zip, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Zip)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-item">
+                @Html.LabelFor(x => x.Phone, new { @class = "required" })
+                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Phone)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-item">
+                @Html.LabelFor(x => x.Email, new { @class = "required" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Email)
+            </div>
+        </div>
+    </div>
+    <div class="title">FIREMNÉ ÚDAJE</div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-item">
+                @Html.LabelFor(x => x.Ico)
+                @Html.TextBoxFor(m => m.Ico, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Ico)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-item">
+                @Html.LabelFor(x => x.Dic)
+                @Html.TextBoxFor(m => m.Dic, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Dic)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-item">
+                @Html.LabelFor(x => x.ContactName)
+                @Html.TextBoxFor(m => m.ContactName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ContactName)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-item">
+                @Html.LabelFor(x => x.Icdph)
+                @Html.TextBoxFor(m => m.Icdph, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Icdph)
+            </div>
+        </div>
+    </div>
+    <div class="row new-section">
+        <div class="col-md-12">
+            <div class="form-item">
+                @Html.CheckBoxFor(m => m.IsDeliveryAddress, new { @class = "styled cb-delivery-address" })
+                @Html.LabelFor(x => x.IsDeliveryAddress)
+                @Html.ValidationMessageFor(m => m.IsDeliveryAddress)
+            </div>
+        </div>
+    </div>
+    <div class="delivery-address @string.Format("{0}", Model.IsDeliveryAddress ? "" : "hidden")">
+        <div class="title">ADRESA DORUČENIA</div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.DeliveryName, new { @class = "required" })
+                    @Html.TextBoxFor(m => m.DeliveryName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.DeliveryName)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.DeliveryCountryCollectionKey, new { @class = "required" })
+                    @Html.DropDownListFor(m => m.DeliveryCountryCollectionKey, new SelectList(Model.DropDowns.CountryCollection, "DataKey", "Name"), new { @class = "form-control chosen-select" })
+                    @Html.ValidationMessageFor(m => m.DeliveryCountryCollectionKey)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.DeliveryStreet, new { @class = "required" })
+                    @Html.TextBoxFor(m => m.DeliveryStreet, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.DeliveryStreet)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.DeliveryCity, new { @class = "required" })
+                    @Html.TextBoxFor(m => m.DeliveryCity, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.DeliveryCity)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.DeliveryZip, new { @class = "required" })
+                    @Html.TextBoxFor(m => m.DeliveryZip, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.DeliveryZip)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.DeliveryPhone)
+                    @Html.TextBoxFor(m => m.DeliveryPhone, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.DeliveryPhone)
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @Html.ValidationSummary(true, "Údaje sa nepodarilo zapísať. Prosím opravte chyby a skúste to znovu.")
+    <div class="row new-section">
+        <div class="col-md-12">
+            <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Zapísať</a>
+            <a href="@Url.Content("~/moj-ucet/zakaznici")" class="btn btn-default btn-lg">Späť</a>
+            <input type="submit" id="submitButton" class="hidden" />
+        </div>
+    </div>
+</div>
+    }
+}

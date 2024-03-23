@@ -1,0 +1,95 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.ProductModel
+
+<h1>Prajete si skutočne odstrániť vybraný produkt?</h1>
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.ProductController>("DeleteRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Partial("Ecommerce/_ModelError", Model.ModelErrors)
+                    @Html.AntiForgeryToken()
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-item-hidden">
+                        @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.CheckBoxFor(m => m.ProductIsVisible, new { @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.ProducerKey, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.ProducerCollectionKey, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextAreaFor(m => m.ProductText, new { @class = "form-control", @readonly = "readonly", rows = 3 })
+                        @Html.TextAreaFor(m => m.ProductDescription, new { @class = "form-control", @readonly = "readonly", rows = 10 })
+                        @Html.TextBoxFor(m => m.ProductImg, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.ProductUrl, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.ProductMetaTitle, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.ProductMetaKeywords, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.ProductMetaDescription, new { @class = "form-control", @readonly = "readonly" })
+
+                        @Html.TextBoxFor(m => m.UnitTypeId, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.CheckBoxFor(m => m.ProductIsNew, new { @readonly = "readonly" })
+                        @Html.CheckBoxFor(m => m.ProductIsSale, new { @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.AvailabilityKey, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.AvailabilityCollectionKey, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.ProductDurability, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.ProductUnitWeight, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.ProductUnitsInPckg, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ProductOrder)
+                        @Html.TextBoxFor(m => m.ProductOrder, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.ProductOrder)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ProductIsVisible)
+                        @Html.TextBoxFor(m => m.ProductIsVisibleText, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.ProductIsVisible)
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ProductCode)
+                        @Html.TextBoxFor(m => m.ProductCode, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.ProductCode)
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ProducerCollectionKey)
+                        @Html.TextBoxFor(m => m.ProducerName, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.ProducerCollectionKey)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ProductName)
+                        @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.ProductName)
+                    </div>
+                </div>
+                <div class="col-md-4 hidden">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ProductCountry)
+                        @Html.TextBoxFor(m => m.ProductCountry, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.ProductCountry)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Odstrániť</a>
+                    <a href="@Url.Content("~/moj-ucet/produkty")" class="btn btn-default btn-lg">Späť</a>
+                    <input type="submit" id="submitButton" class="hidden" />
+                </div>
+            </div>
+        </div>
+    }
+}

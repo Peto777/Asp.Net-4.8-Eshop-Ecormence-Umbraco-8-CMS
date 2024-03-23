@@ -1,0 +1,45 @@
+﻿@model CategoryPromoModel
+@using takfajn.lib.Models.Ecommerce
+
+<div class="product-list">
+    <div class="product-list-img">
+        @if (Model.Products.Count > 0)
+        {
+            for (int idx = 0; idx < Model.Products.Count; idx = idx + 4)
+            {
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.Partial("ProductPublic/ProductItem_Img", new ProductSessionModel(Model.Products[idx], Model.SessionId))
+                    </div>
+                    <div class="col-md-3">
+                        @if (idx + 1 < Model.Products.Count)
+                        {
+                            @Html.Partial("ProductPublic/ProductItem_Img", new ProductSessionModel(Model.Products[idx + 1], Model.SessionId))
+                        }
+                    </div>
+                    <div class="col-md-3">
+                        @if (idx + 2 < Model.Products.Count)
+                        {
+                            @Html.Partial("ProductPublic/ProductItem_Img", new ProductSessionModel(Model.Products[idx + 2], Model.SessionId))
+                        }
+                    </div>
+                    <div class="col-md-3">
+                        @if (idx + 3 < Model.Products.Count)
+                        {
+                            @Html.Partial("ProductPublic/ProductItem_Img", new ProductSessionModel(Model.Products[idx + 3], Model.SessionId))
+                        }
+                    </div>
+                </div>
+            }
+            <div class="btn-more">
+                <a href="@Model.Category.Url">Zobraziť viac produktov&nbsp;&nbsp;&nbsp;></a>
+            </div>
+        }
+        else
+        {
+            <div class="message-div">
+                <p>Žiadne produkty na zobrazenie.</p>
+            </div>
+        }
+    </div>
+</div>

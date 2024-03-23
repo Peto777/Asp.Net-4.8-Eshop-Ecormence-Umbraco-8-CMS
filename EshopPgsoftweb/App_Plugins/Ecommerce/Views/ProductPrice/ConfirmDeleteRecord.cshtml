@@ -1,0 +1,64 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.ProductPriceModel
+
+<h1>Prajete si skutočne odstrániť vybranú cenu?</h1>
+@Html.Partial("ProductHeader", Model.Product)
+
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.ProductPriceController>("DeleteRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "Údaje sa nepodarilo uložiť. Prosím opravte chyby a skúste to znovu.")
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-item-hidden">
+                        @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.ProductKey, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ValidFrom)
+                        @Html.TextBoxFor(m => m.ValidFrom, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.ValidFrom)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ValidTo)
+                        @Html.TextBoxFor(m => m.ValidTo, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.ValidTo)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.VatRate)
+                        @Html.TextBoxFor(m => m.VatRate, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.VatRate)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.Price_1_NoVat)
+                        @Html.TextBoxFor(m => m.Price_1_NoVat, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.Price_1_NoVat)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.Price_1_WithVat)
+                        @Html.TextBoxFor(m => m.Price_1_WithVat, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.Price_1_WithVat)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Odstrániť</a>
+                    <a href="@string.Format("{0}?productId={1}", Url.Content("~/moj-ucet/produkty/ceny"), Model.ProductKey.ToString())" class="btn btn-default btn-lg">Späť</a>
+                    <input type="submit" id="submitButton" class="hidden" />
+                </div>
+            </div>
+        </div>
+    }
+}

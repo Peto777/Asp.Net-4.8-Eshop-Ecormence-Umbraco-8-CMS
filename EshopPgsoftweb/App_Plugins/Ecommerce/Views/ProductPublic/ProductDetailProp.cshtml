@@ -1,0 +1,13 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.ProductPublicPropModel
+
+@if (!string.IsNullOrEmpty(Model.PropValue))
+{
+    <div class="row">
+        <div class="col-md-3">
+            <div class="prop-label">@Model.PropLabel</div>
+        </div>
+        <div class="col-md-9">
+            <div class="prop-value @Model.CssClass">@Model.PropValue</div>
+        </div>
+    </div>
+}

@@ -1,0 +1,76 @@
+﻿@model Product2QuoteModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+
+<h1>POLOŽKA OBJEDNÁVKY</h1>
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.QuoteAdminProductController>("SaveRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "Údaje sa nepodarilo uložiť. Prosím opravte chyby a skúste to znovu.")
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-item-hidden">
+                        @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.PkQuote, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.PkProduct, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.NonProductId, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.ItemOrder, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.UnitTypeId, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.UnitWeight, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.UnitPriceVatPerc, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ItemCode)
+                        @Html.TextBoxFor(m => m.ItemCode, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.ItemCode)
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ItemName)
+                        @Html.TextBoxFor(m => m.ItemName, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.ItemName)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.UnitName)
+                        @Html.TextBoxFor(m => m.UnitName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.UnitName)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ItemPcs)
+                        @Html.TextBoxFor(m => m.ItemPcs, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ItemPcs)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-item">
+                        <label>Cena bez DPH za MJ</label>
+                        @Html.TextBoxFor(m => m.UnitPriceNoVat, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(m => m.UnitPriceNoVat)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-item">
+                        <label>Cena s DPH za MJ</label>
+                        @Html.TextBoxFor(m => m.UnitPriceWithVat, new { @class = "form-control calc-vat", @data_vattarget = "UnitPriceNoVat", @data_vatrate = "UnitPriceVatPerc" })
+                        @Html.ValidationMessageFor(m => m.UnitPriceWithVat)
+                    </div>
+                </div>
+            </div>
+            <div class="row new-section">
+                <div class="col-md-12">
+                    <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Zapísať</a>
+                    <a href="@Url.Content(string.Format("~/moj-ucet/objednavky/upravit?id={0}&tab={1}", Model.PkQuote, QuoteEditModel.TabItemsId))" class="btn btn-default btn-lg">Späť</a>
+                    <input type="submit" id="submitButton" class="hidden" />
+                </div>
+            </div>
+        </div>
+    }
+}

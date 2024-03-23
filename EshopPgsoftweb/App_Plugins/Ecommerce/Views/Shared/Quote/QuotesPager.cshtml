@@ -1,0 +1,32 @@
+﻿@using dufeksoft.lib.Model.Grid;
+@model GridPagerModel
+@{ 
+    int totalItems = Model.ItemCnt;
+    List<GridPageNumberModel> pagerItems = Model.GetPagerList();
+}
+
+@if (pagerItems.Count > 0 && totalItems > 0)
+{
+    <div class="grid-list-pager">
+        @if (pagerItems.Count > 0)
+        {
+            <div class="pager">
+                @foreach (GridPageNumberModel pager in pagerItems)
+                {
+                    if (pager.IsCurrent)
+                    {
+                        <span class="pager-current">@pager.Name</span>
+                        continue;
+                    }
+                    if (string.IsNullOrEmpty(pager.Url))
+                    {
+                        <span class="pager-text">@pager.Name</span>
+                        continue;
+                    }
+                    <a href="@pager.Url"><span class="pager-link">@pager.Name</span></a>
+                }
+            </div>
+        }
+        <div class="clearfix"></div>
+    </div>
+}

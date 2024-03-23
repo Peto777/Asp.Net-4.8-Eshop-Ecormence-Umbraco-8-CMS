@@ -1,0 +1,96 @@
+﻿@inherits _EshoppgsoftwebViewPage
+
+@using eshoppgsoftweb.lib.Models
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Models.UmbracoCmsContent
+@using eshoppgsoftweb.lib.Repositories.UmbracoCmsContent
+@using eshoppgsoftweb.lib.Util
+
+@{
+    Texty texty = TextyRepository.GetFromUmbraco(Umbraco);
+    MembershipUser user = Umbraco.MemberIsLoggedOn() ? System.Web.Security.Membership.GetUser() : null;
+    _EshopModel eshop = this.GetCurrentEshopModel();
+}
+
+<!-- Facebook Pixel Code -->
+@*<script async>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1447584592111751');
+        fbq('track', 'PageView');
+</script>
+<noscript async>
+    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1447584592111751&ev=PageView&noscript=1" />
+</noscript>*@
+<!-- End Facebook Pixel Code -->
+
+<header class="header desktop-only">
+    <div class="top-bar">
+        <div class="container-fluid">
+            <div class="header-logo">
+                <a href="@Url.Content("~/")">
+                    <img src="@Url.Content("~/Styles/images/pgsoftweb-logo-footer.png")" />
+                </a>
+            </div>
+            <div class="header-contact">
+                <div class="contact-items">
+                    <div class="contact-item item-right"><img src="@Url.Content("~/Styles/images/icon-mail.png")" alt="e-mail" /><a href="mailto:@texty.EshopPgsoftwebEmail">@texty.EshopPgsoftwebEmail</a></div>
+                    <div class="contact-item item-left"><img src="@Url.Content("~/Styles/images/icon-phone.png")" alt="telefón" /><a href="tel:@texty.EshoPgsoftwebTelefon">@texty.EshoPgsoftwebTelefon</a></div>
+                </div>
+                <div class="quick-links">
+                    <div class="quick-item dark">
+                        <a href="@ConfigurationUtil.EshopRootUrl" title="Všetky produkty"><i class="fa fa-store-alt fa-fw"></i><span>Nakupovať</span></a>
+                    </div>
+                    <div class="quick-item light">
+                        <a href="@Url.Content("~/info-o-donaske")"><i class="fa fa-box-open fa-fw"></i><span>Info o donáške</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="header-tools">
+                <div class="header-login">
+                    @if (user != null)
+                    {
+                        <a href="@Url.Content("~/moj-ucet")">@user.UserName</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Content("~/moj-ucet/prihlasenie")">Prihlásenie</a>
+                        <span class="login-separator">|</span>
+                        <a href="@Url.Content("~/nova-registracia")">Registrácia</a>
+                    }
+                </div>
+                <div class="header-basket">
+                    <a href="@Url.Content("~/kosik")"><span><i class="glyphicon glyphicon-shopping-cart"></i></span>
+                        <span class="header-basket-pcs">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<header class="header mobile-only">
+    <div class="top-bar">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="contact-item"><a href="mailto:@texty.EshopPgsoftwebEmail">@texty.EshopPgsoftwebEmail</a></div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="contact-item text-right"><img src="@Url.Content("~/Styles/images/icon-phone.png")" alt="telefón" /><a href="tel:@texty.EshoPgsoftwebTelefon">@texty.EshoPgsoftwebTelefon</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+@Html.Partial("Layout/_MainNavigation", new MainNavigationModel() { User = user, Eshop = eshop })
+

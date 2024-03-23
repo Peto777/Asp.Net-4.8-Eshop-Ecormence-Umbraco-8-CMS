@@ -1,0 +1,46 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@model PaymentTypePagingListModel
+
+@{
+    string urlInsert = Url.Content("~/moj-ucet/sposoby-platby/pridat");
+    string urlUpdate = Url.Content("~/moj-ucet/sposoby-platby/upravit");
+    string urlDelete = Url.Content("~/moj-ucet/sposoby-platby/odstranit");
+}
+
+<h1>SPÔSOBY PLATBY</h1>
+@{
+    var grid = new WebGrid(null, rowsPerPage: Model.ItemsPerPage, defaultSort: "PaymentOrder");
+    grid.Bind(Model.Items, rowCount: Model.TotalItems, autoSortAndPage: false);
+    @grid.GetHtml(
+                    htmlAttributes: new { @id = "paymenttypeslist" },
+                    mode: WebGridPagerModes.All,
+                    tableStyle: "webgrid",
+                    headerStyle: "",
+                    footerStyle: "paging",
+                    alternatingRowStyle: "",
+                    columns: grid.Columns(
+                        grid.Column("", "", format: a =>
+                            Html.Raw(
+                            "<span class='tools'>" +
+                            "<a href='" + string.Format("{0}?id={1}", urlUpdate, a.pk.ToString()) + "' title='Upraviť spôsob platby' class='nowrap'><i class='fa fa-edit'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlDelete, a.pk.ToString()) + "' title='Odstrániť spôsob platby' class='nowrap'><i class='fa fa-trash'></i></a>"
+                            + "</span>")),
+                        grid.Column("PaymentOrder", "Poradie", canSort: true),
+                        grid.Column("Code", "Kód", canSort: true),
+                        grid.Column("Name", "Názov", canSort: true),
+                        grid.Column("VatPerc", "% DPH", canSort: true),
+                        grid.Column("PriceNoVat", "Cena bez DPH", canSort: true),
+                        grid.Column("PriceWithVat", "Cena s DPH", canSort: true),
+                        grid.Column("GatewayTypeId", "Platobná brána", canSort: true, format: a => a.GatewayTypeName)
+             ));
+
+    <script type="text/javascript">
+        $(function () {
+            $('#paymenttypeslist thead tr th:first').html(
+                "<a href='@urlInsert' class='btn btn-default' title='Pridať spôsob platby'>Pridať</a>"
+                );
+        });
+    </script>
+
+}

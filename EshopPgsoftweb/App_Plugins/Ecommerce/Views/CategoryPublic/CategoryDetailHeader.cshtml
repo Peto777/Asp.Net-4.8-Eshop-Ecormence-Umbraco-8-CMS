@@ -1,0 +1,34 @@
+﻿@model CategoryPublicModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Repositories
+@using eshoppgsoftweb.lib.Util
+
+@{
+    CategoryModel root = CategoryModel.CreateCopyFrom(EshoppgsoftwebCategory.RootEshoppgsoftwebCategory());
+}
+
+<div class="breadcrumbs category">
+    <a href="@Url.Content("~/")">pgsoftweb.sk</a>
+    @if (Model.CategoryData.Parents != null)
+    {
+        if (Model.CategoryData.Parents.Count > 0)
+        {
+            @HtmlUtil.BreadcrumbsSeparator()
+            <a href="@root.Url">Všetky produkty</a>
+        }
+        for (int i = Model.CategoryData.Parents.Count - 1; i > 0; i--)
+        {
+            CategoryModel parent = Model.CategoryData.Parents[i];
+
+            @HtmlUtil.BreadcrumbsSeparator()
+            <a href="@parent.Url">@parent.CategoryName</a>
+        }
+    }
+    @HtmlUtil.BreadcrumbsSeparator()
+    <span>@Model.CategoryData.CategoryName</span>
+    <nav class="navbar navbar-category">
+        <a class="collapsed" data-toggle="collapse" data-target="#navbar-category" aria-expanded="false" aria-controls="navbar">
+            <i class="fa fa-filter"></i>
+        </a>
+    </nav>
+</div>

@@ -1,0 +1,36 @@
+﻿@model LoginModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using Umbraco.Web
+
+@using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.MemberController>("SubmitLogin", null, new { @class = "form-horizontal", role = "form" }))
+{
+    <div class="naplnspajzu-form">
+        @Html.AntiForgeryToken()
+        <div class="form-item">
+            @Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "E-mailová adresa" })
+            @Html.ValidationMessageFor(m => m.Username)
+        </div>
+        <div class="form-item">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Heslo" })
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+
+        @Html.ValidationSummary(true)
+        <div class="form-item">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="links">
+                        <a href="@Url.Content("~/nova-registracia")">Nová registrácia</a>
+                        <a href="@Url.Content("~/zabudnute-heslo")">Zabudnuté heslo</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="submit">
+                        <a href="#" onclick="document.getElementById('submitLoginButton').click(); return false;" class="btn btn-primary btn-lg">Prihlásiť</a>
+                        <input type="submit" id="submitLoginButton" class="hidden" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

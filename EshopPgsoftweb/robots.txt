@@ -1,0 +1,3 @@
+Sitemap: https://www.pgsoftweb.sk/sitemap
+User-agent: *
+Disallow:

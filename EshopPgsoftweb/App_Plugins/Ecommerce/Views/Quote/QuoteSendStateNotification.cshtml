@@ -1,0 +1,22 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Models
+@using eshoppgsoftweb.lib.Repositories
+@using eshoppgsoftweb.lib.Util
+@model BasketModel
+
+<div class="ec-category-detail">
+    <div class="title"><h1>OBJEDNÁVKA ČÍSLO @Model.CurrentQuote.QuoteId</h1></div>
+</div>
+
+<div class="container message-div">
+    <p>
+        E-mail s informáciami o stave objednávky bol úspešne odoslaný na adresu <span>@Model.CurrentQuote.User.QuoteEmailForNotification</span>.
+    </p>
+    <div class="basket-footer-buttons">
+        <div class="row">
+            <div class="col-md-offset-4 col-md-4">
+                <a href="@Url.Content(string.Format("~{0}", Model.CurrentQuote.GetQuoteDetailUrl()))" class="btn btn-default">ZOBRAZIŤ OBJEDNÁVKU</a>
+            </div>
+        </div>
+    </div>
+</div>

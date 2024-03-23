@@ -1,0 +1,97 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@model QuoteModel
+@{ 
+    string urlInsert = Url.Content("~/moj-ucet/objednavky/upravit/pridat-polozku");
+    string urlUpdate = Url.Content("~/moj-ucet/objednavky/upravit/upravit-polozku");
+    string urlDelete = Url.Content("~/moj-ucet/objednavky/upravit/odstranit-polozku");
+}
+
+<div class="basket-items-header">
+    <div class="row">
+        <div class="col-md-1"><a href="@string.Format("{0}?id={1}", urlInsert, Model.pk)" class='btn btn-default btn-xs' title='Pridať položku'><i class="fa fa-plus fa-fw"></i></a></div>
+        <div class="col-md-1"></div>
+        <div class="col-md-5 left">PRODUKT</div>
+        <div class="col-md-1 left">KÓD</div>
+        <div class="col-md-1">CENA</div>
+        <div class="col-md-1 left">MJ</div>
+        <div class="col-md-1">MNOŽSTVO</div>
+        <div class="col-md-1">SPOLU</div>
+    </div>
+</div>
+
+@foreach (Product2QuoteModel product in Model.Items)
+{
+    var productId = product.PkProduct;
+    <div class="basket-product-item" id="pc-@productId">
+        <div class="row">
+            <div class="col-md-1">
+                @if(product.IsProductItem)
+                {
+                    <div class="tools">
+                        <a href="@string.Format("{0}?quoteId={1}&itemId={2}", urlUpdate, Model.pk, product.pk)" class='' title='Upraviť položku'><i class="fa fa-edit"></i></a>
+                        <a href="@string.Format("{0}?quoteId={1}&itemId={2}", urlDelete, Model.pk, product.pk)" class='' title='Odstrániť položku'><i class="fa fa-minus"></i></a>
+                    </div>
+                }
+            </div>
+            <div class="col-md-1 product-img">
+                @if (!string.IsNullOrEmpty(product.ProductImg))
+                {
+                    <a href="@product.Url"><img src="@product.ProductImg" alt="@product.ProductName" class="img-responsive" /></a>
+                }
+            </div>
+            <div class="col-md-5">
+                @if (string.IsNullOrEmpty(product.Url))
+                {
+                    <span>@product.ProductName</span>
+                }
+                else
+                {
+                    <a class="lnk-detail" target="_blank" href="@product.Url">@product.ProductName</a>
+                }
+            </div>
+            <div class="col-md-1">
+                @if (product.IsProductItem)
+                {
+                    <span class="pip-label">KÓD:</span>
+                    <span class="pip-value">@product.ItemCode</span>
+                }
+            </div>
+            <div class="col-md-1 price">
+                @if (product.IsProductItem)
+                {
+                    <span class="pip-label">CENA:</span>
+                    <span class="pip-value"><strong>@product.BasePriceWithCurrencyWithVat</strong></span>
+                }
+            </div>
+            <div class="col-md-1">
+                @if (product.IsProductItem)
+                {
+                    <span class="pip-label">MJ:</span>
+                    <span class="pip-value"><strong>@product.UnitName</strong></span>
+                }
+            </div>
+            <div class="col-md-1">
+                @if (product.IsProductItem)
+                {
+                    <div class="pip-line">
+                        <div class="product-pcs">
+                            <span class="pip-label">Množstvo:</span>
+                            <span class="pip-value">@product.ItemPcs</span>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-md-1 price">
+                <span class="pip-label">SPOLU:</span>
+                <span class="pip-value"><strong><span class="with-vat">@product.TotalPriceWithCurrencyWithVat</span></strong></span>
+            </div>
+        </div>
+    </div>
+}
+<div class="basket-total-price with-vat">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-9">SPOLU</div>
+        <div class="col-md-2 price">@Model.TotalPriceWithVatWithCurrency</div>
+    </div>
+</div>

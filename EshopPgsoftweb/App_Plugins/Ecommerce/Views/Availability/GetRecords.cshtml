@@ -1,0 +1,40 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@model AvailabilityPagingListModel
+
+@{
+    string urlInsert = Url.Content("~/moj-ucet/dostupnost-produktov/pridat");
+    string urlUpdate = Url.Content("~/moj-ucet/dostupnost-produktov/upravit");
+    string urlDelete = Url.Content("~/moj-ucet/dostupnost-produktov/odstranit");
+}
+
+<h1>DOSTUPNOSTI PRODUKTOV</h1>
+@{
+    var grid = new WebGrid(null, rowsPerPage: Model.ItemsPerPage, defaultSort: "AvailabilityName");
+    grid.Bind(Model.Items, rowCount: Model.TotalItems, autoSortAndPage: false);
+    @grid.GetHtml(
+                    htmlAttributes: new { @id = "availabilitieslist" },
+                    mode: WebGridPagerModes.All,
+                    tableStyle: "webgrid",
+                    headerStyle: "",
+                    footerStyle: "paging",
+                    alternatingRowStyle: "",
+                    columns: grid.Columns(
+                        grid.Column("", "", format: a =>
+                            Html.Raw(
+                            "<span class='tools'>" +
+                            "<a href='" + string.Format("{0}?id={1}", urlUpdate, a.pk.ToString()) + "' title='Upraviť dostupnosť výrobkov' class='nowrap'><i class='fa fa-edit'></i></a>"
+                            + "&#160;&#160;" +
+                            "<a href='" + string.Format("{0}?id={1}", urlDelete, a.pk.ToString()) + "' title='Odstrániť dostupnosť výrobkov' class='nowrap'><i class='fa fa-trash'></i></a>"
+                            + "</span>")),
+                        grid.Column("AvailabilityName", "Názov", canSort: true)
+             ));
+
+    <script type="text/javascript">
+        $(function () {
+            $('#availabilitieslist thead tr th:first').html(
+                "<a href='@urlInsert' class='btn btn-default' title='Pridať dostupnosť výrobkov'>Pridať</a>"
+                );
+        });
+    </script>
+
+}

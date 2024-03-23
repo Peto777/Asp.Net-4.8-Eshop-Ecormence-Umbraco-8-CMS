@@ -1,0 +1,64 @@
+﻿@inherits UmbracoViewPage
+@using eshoppgsoftweb.lib.Repositories
+@using eshoppgsoftweb.lib.Models
+@using eshoppgsoftweb.lib
+@{
+    Layout = null;
+    var home = Model.Root();
+    string protokol = new eshoppgsoftweb.lib.Controllers._BaseControllerUtil().CurrentRequest.Url.Scheme;
+    string prefix = string.Format("{0}://www.pgsoftweb.sk", protokol);
+
+    string categoryUrl = string.Format("{0}{1}", prefix, CategoryContentFinder.CategoryPath);
+    List<EshoppgsoftwebCategory> categoryList = new EshoppgsoftwebCategoryRepository().GetPage(1, _PagingModel.AllItemsPerPage, Guid.Empty).Items;
+
+    string productUrl = string.Format("{0}{1}", prefix, ProductContentFinder.ProductPath);
+    List<EshoppgsoftwebProduct> productList = new EshoppgsoftwebProductRepository().GetPage(1, _PagingModel.AllItemsPerPage, filter: new EshoppgsoftwebProductFilter() { OnlyIsVisible = true }).Items;
+}
+
+<?xml version="1.0" encoding="utf-8" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    @MvcHtmlString.Create(RecurseTree(prefix, home))
+    @foreach (EshoppgsoftwebCategory category in categoryList)
+    {
+        if (category.CategoryIsVisible)
+        {
+            @MvcHtmlString.Create(string.Format("    <url><loc>{0}{1}</loc></url>\n", categoryUrl, category.CategoryUrl))
+        }
+    }
+    @foreach (EshoppgsoftwebProduct product in productList)
+    {
+        @MvcHtmlString.Create(string.Format("    <url><loc>{0}{1}</loc></url>\n", productUrl, product.ProductUrl))
+    }
+</urlset>
+
+@functions
+{
+    string RecurseTree(string prefix, IPublishedContent mainPage)
+    {
+        System.Text.StringBuilder str = new System.Text.StringBuilder();
+        str.Append(string.Format("    <url><loc>{0}{1}</loc></url>\n", prefix, mainPage.Url().TrimEnd('/')));
+        foreach (var page in mainPage.Children)
+        {
+            if (page.IsDocumentType("siteMap"))
+            {
+                continue;
+            }
+            if (page.IsDocumentType("protectedPage"))
+            {
+                continue;
+            }
+            if (page.IsDocumentType("redirectPage"))
+            {
+                continue;
+            }
+            if (page.IsDocumentType("texty"))
+            {
+                continue;
+            }
+
+            str.Append(RecurseTree(prefix, page));
+        }
+
+        return str.ToString();
+    }
+}

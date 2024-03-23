@@ -1,0 +1,45 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@model BasketModel
+
+@{ 
+    bool isPrevQuote = Model.PrevQuoteKey != null && Model.PrevQuoteKey != Guid.Empty;
+    bool isNextQuote = Model.NextQuoteKey != null && Model.NextQuoteKey != Guid.Empty;
+}
+
+@if (isPrevQuote || isNextQuote)
+{
+    <div class="step-buttons">
+        <div class="row">
+            <div class="col-md-6">
+                @if (isPrevQuote)
+                {
+                    <div class="step-prev">
+                        <a href="@string.Format("{0}?id={1}", Model.QuoteDetailUrl, Model.PrevQuoteKey)">
+                            <div class="step-btn">
+                                <
+                            </div>
+                            <div class="step-txt">
+                                PREDCHÁDZAJÚCA<br />OBJEDNÁVKA
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+            <div class="col-md-6">
+                @if (isNextQuote)
+                {
+                    <div class="step-next">
+                        <a href="@string.Format("{0}?id={1}", Model.QuoteDetailUrl, Model.NextQuoteKey)">
+                            <div class="step-txt">
+                                ĎALŠIA<br />OBJEDNÁVKA
+                            </div>
+                            <div class="step-btn">
+                                >
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,46 @@
+﻿@model CategoryTree
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Repositories
+
+@{
+    List<CategoryModel> dataList = new List<CategoryModel>();
+    dataList.Add(Model.Root.Children[0]);
+    dataList.Add(Model.Root.Children[1]);
+
+    bool isLeft = true;
+    int num = 0;
+}
+
+<div class="home-category-banners-wrapper">
+    @foreach (CategoryModel item in dataList)
+    {
+        string id = string.Format("cbi-{0}", ++num);
+        <div class="home-category-banner @string.Format("{0}", isLeft ? "" : "right")">
+            <a href="#" onclick="$('#@id').toggle(); return false;">
+                <div class="img">
+                    <img src="@item.CategoryImg" alt="@item.CategoryName" />
+                </div>
+                <div class="stripe"></div>
+                <div class="title">
+                    <div class="text">
+                        <span>@item.CategoryName</span>
+                        <img src="@Url.Content("~/Styles/images/ikona-banner-category.png")" />
+                    </div>
+                </div>
+            </a>
+            <div id="@id" class="menu">
+                <div class="menu-title">@item.CategoryName</div>
+                <div class="menu-content">
+                    @foreach (CategoryModel child in item.Children)
+                    {
+                        <div class="menu-item"><a href="@child.Url">@child.CategoryName</a></div>
+                    }
+                </div>
+                <div class="menu-close"><a href="#" onclick="$('#@id').toggle(); return false;">x</a></div>
+            </div>
+        </div>
+
+        isLeft = !isLeft;
+    }
+</div>
+

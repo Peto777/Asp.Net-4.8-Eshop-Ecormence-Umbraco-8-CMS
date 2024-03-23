@@ -1,0 +1,120 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.CategoryModel
+
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.CategoryController>("SaveRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+<div class="naplnspajzu-form img-model-div">
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Partial("Ecommerce/_ModelError", Model.ModelErrors)
+            @Html.AntiForgeryToken()
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="form-item-hidden">
+                @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBoxFor(m => m.ParentCategoryKey, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+            <div class="form-item">
+                @Html.LabelFor(x => x.CategoryOrder)
+                @Html.TextBoxFor(m => m.CategoryOrder, new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(m => m.CategoryOrder)
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-item">
+                @Html.LabelFor(x => x.CategoryIsVisible)
+                <span class="form-control frame">
+                    @Html.CheckBoxFor(m => m.CategoryIsVisible, new { @class = "styled" })
+                    <label for="CategoryIsVisible">&nbsp;</label>
+                </span>
+                @Html.ValidationMessageFor(m => m.CategoryIsVisible)
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-item">
+                @Html.LabelFor(x => x.CategoryCode)
+                @Html.TextBoxFor(m => m.CategoryCode, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.CategoryCode)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-item">
+                @Html.LabelFor(x => x.CategoryName)
+                @Html.TextBoxFor(m => m.CategoryName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.CategoryName)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-item">
+                @Html.LabelFor(x => x.CategoryDescription)
+                @Html.TextAreaFor(m => m.CategoryDescription, new { @class = "form-control ckedit", rows = 10 })
+                @Html.ValidationMessageFor(m => m.CategoryDescription)
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-item">
+                @Html.LabelFor(x => x.CategoryImg)
+                @Html.TextBoxFor(m => m.CategoryImg, new { @class = "hidden img-model" })
+                <img src="@Model.AdminImgUrl" onclick="ecImageSelectStart(); return false;" class="img-model img-responsive" title="Kliknite pre zmenu obrázka" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-item">
+                @Html.LabelFor(x => x.CategoryOfferText)
+                @Html.TextAreaFor(m => m.CategoryOfferText, new { @class = "form-control", rows = 5 })
+                @Html.ValidationMessageFor(m => m.CategoryOfferText)
+            </div>
+        </div>
+    </div>
+    <fieldset>
+        <legend>SEO</legend>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.CategoryUrl)
+                    @Html.TextBoxFor(m => m.CategoryUrl, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.CategoryUrl)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.CategoryMetaTitle)
+                    @Html.TextBoxFor(m => m.CategoryMetaTitle, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.CategoryMetaTitle)
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.CategoryMetaKeywords)
+                    @Html.TextBoxFor(m => m.CategoryMetaKeywords, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.CategoryMetaKeywords)
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-item">
+                    @Html.LabelFor(x => x.CategoryMetaDescription)
+                    @Html.TextBoxFor(m => m.CategoryMetaDescription, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.CategoryMetaDescription)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <div class="row new-section">
+        <div class="col-md-12">
+            <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Zapísať</a>
+            <a href="@string.Format("{0}?id={1}", Url.Content("~/moj-ucet/kategorie"), Model.ParentCategoryKey.ToString())" class="btn btn-default btn-lg">Späť</a>
+            <input type="submit" id="submitButton" class="hidden" />
+        </div>
+    </div>
+</div>
+    }
+}
+
+@Html.Partial("Ecommerce/_SelectImg", new eshoppgsoftweb.lib.Models.Ecommerce.SelectImgModel() { FileUploadCategory = "Category", EmptyImgUrl = eshoppgsoftweb.lib.Models.Ecommerce.CategoryModel.EmptyImgUrl })
+@Html.Partial("Ecommerce/_CKEditor", new eshoppgsoftweb.lib.Models.Ecommerce.CKEditorModel("ckedit", "200"))

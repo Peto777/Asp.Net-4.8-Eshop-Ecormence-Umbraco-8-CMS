@@ -1,0 +1,13 @@
+﻿@model CategoryModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+
+<div class="category-promo">
+    <a href="@Model.Url">
+        <div class="category-promo-title">
+            @Model.CategoryName
+        </div>
+        <div class="category-promo-img">
+            <img class="img-responsive" src="@Model.CategoryImg" alt="@Model.CategoryName" />
+        </div>
+    </a>
+</div>

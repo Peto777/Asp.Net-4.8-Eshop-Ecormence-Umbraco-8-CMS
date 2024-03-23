@@ -1,0 +1,57 @@
+﻿@model ProductImagesModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Repositories
+@using System.Text
+
+<h1>OBRÁZKY PRODUKTU</h1>
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.ProductController>("SaveImages", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            @Html.Partial("Ecommerce/_ModelError", Model.ModelErrors)
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-item-hidden">
+                        @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ProductName)
+                        @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @Html.Partial("Ecommerce/_SelectImg", new eshoppgsoftweb.lib.Models.Ecommerce.SelectImgModel() { FileUploadCategory = Model.FileUploadCategory, EmptyImgUrl = eshoppgsoftweb.lib.Models.Ecommerce.ProductModel.EmptyImgUrl, SliderSelector = ".slider-content .slider" })
+                <div class="col-md-4">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ProductImg)
+                        @Html.TextBoxFor(m => m.ProductImg, new { @class = "hidden img-model" })
+                        <img src="@Model.AdminImgUrl" onclick="ecImageSelectStart(); return false;" class="img-model img-responsive" title="Kliknite pre úpravu zoznamu obrázkov produktu" />
+                    </div>
+                </div>
+                <div class="col-md-offset-2 col-md-4">
+                    <div class="form-item">
+                        <label>Všetky obrázky</label>
+                        <div class="product-images-slider">
+                            <div class="slider-content">
+                                <div class="slider"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="img-model-div">
+                        <a href="#" onclick="ecImageSelectStart(); return false;" class="btn btn-default">Upraviť obrázky</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row new-section img-model-div">
+                <div class="col-md-12">
+                    <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Zapísať</a>
+                    <a href="@Url.Content("~/moj-ucet/produkty")" class="btn btn-default btn-lg">Späť</a>
+                    <input type="submit" id="submitButton" class="hidden" />
+                </div>
+            </div>
+        </div>
+    }
+}

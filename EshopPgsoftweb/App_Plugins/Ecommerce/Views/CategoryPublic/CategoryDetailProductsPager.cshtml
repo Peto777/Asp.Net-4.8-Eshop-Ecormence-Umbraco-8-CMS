@@ -1,0 +1,54 @@
+﻿@using dufeksoft.lib.Model.Grid;
+@model GridPagerAndSorterModel
+
+@if (Model.PagerItems.Count > 0 && Model.TotalItems > 0)
+{
+    <div class="grid-list-pager">
+        @if (Model.PagerItems.Count > 0)
+        {
+            <div class="pager">
+                @foreach (GridPageNumberModel pager in Model.PagerItems)
+                {
+                    if (pager.IsCurrent)
+                    {
+                        <span class="pager-current">@pager.Name</span>
+                        continue;
+                    }
+                    if (string.IsNullOrEmpty(pager.Url))
+                    {
+                        if (pager.Name == "...")
+                        {
+                        <a href="#" onclick="naplnspajzuTogglePageNbInput_CategoryDetailProductsPager(this); return false;">
+                            <span class="pager-link">
+                                @pager.Name
+                            </span>
+                        </a>
+                            <span class="page-nb-input hidden">
+                                <label>Zadajte číslo strany</label>
+                                <input class="form-item"/>
+                                <a href="@pager.TemplateUrl" onclick="naplnspajzuLoadPageNb_CategoryDetailProductsPager(this, '@GridPagerModel.DefaultReplacePageNb'); return true;">ZOBRAZIŤ</a>
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="pager-text">@pager.Name</span>
+                        }
+                        continue;
+                    }
+                    if (pager.Name == "<")
+                    {
+                        <a href="@pager.Url"><span class="pager-link-btn"><span class="arrow-prev"><</span>Predchádzajúca strana</span></a>
+                        continue;
+                    }
+                    if (pager.Name == ">")
+                    {
+                        <a href="@pager.Url"><span class="pager-link-btn">Nasledujúca strana<span class="arrow-next">></span></span></a>
+                        continue;
+                    }
+                    <a href="@pager.Url"><span class="pager-link">@pager.Name</span></a>
+                }
+            </div>
+        }
+        <div class="clearfix"></div>
+    </div>
+}

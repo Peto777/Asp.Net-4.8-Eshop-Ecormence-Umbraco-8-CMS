@@ -1,0 +1,45 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.ProductAttributeModel
+
+<h1>VLASTNOSŤ PRODUKTOV</h1>
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.ProductAttributeController>("SaveRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "Údaje sa nepodarilo uložiť. Prosím opravte chyby a skúste to znovu.")
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-item-hidden">
+                        @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ProductAttributeOrder)
+                        @Html.TextBoxFor(m => m.ProductAttributeOrder, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ProductAttributeOrder)
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ProductAttributeGroup)
+                        @Html.TextBoxFor(m => m.ProductAttributeGroup, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ProductAttributeGroup)
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-item">
+                        @Html.LabelFor(x => x.ProductAttributeName)
+                        @Html.TextBoxFor(m => m.ProductAttributeName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.ProductAttributeName)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Zapísať</a>
+                    <a href="@Url.Content("~/moj-ucet/vlastnosti-produktov")" class="btn btn-default btn-lg">Späť</a>
+                    <input type="submit" id="submitButton" class="hidden" />
+                </div>
+            </div>
+        </div>
+    }
+}

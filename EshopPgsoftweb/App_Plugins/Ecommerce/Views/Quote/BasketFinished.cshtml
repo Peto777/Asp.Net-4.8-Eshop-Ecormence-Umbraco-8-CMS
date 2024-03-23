@@ -1,0 +1,20 @@
+﻿@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Models
+@using eshoppgsoftweb.lib.Repositories
+@model BasketModel
+
+<div class="container">
+    <div class="basket-footer-buttons">
+        <p class="center">
+            <strong>Ďakujeme za váš nákup!</strong>
+        </p>
+    </div>
+
+    <div class="basket-footer-buttons">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <a href="@Url.Content(string.Format("~{0}", Model.CurrentQuote.GetQuoteDetailUrl()))" class="btn btn-primary">POZRITE SI VAŠU OBJEDNÁVKU</a>
+            </div>
+        </div>
+    </div>
+</div>

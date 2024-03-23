@@ -1,0 +1,83 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.TransportTypeModel
+
+<h1>Prajete si skutočne odstrániť vybraný spôsob dopravy?</h1>
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.TransportTypeController>("DeleteRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "Údaje sa nepodarilo uložiť. Prosím opravte chyby a skúste to znovu.")
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-item-hidden">
+                                @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                            <div class="form-item">
+                                @Html.LabelFor(x => x.TransportOrder)
+                                @Html.TextBoxFor(m => m.TransportOrder, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(m => m.TransportOrder)
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-item">
+                                @Html.LabelFor(x => x.Code)
+                                @Html.TextBoxFor(m => m.Code, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(m => m.Code)
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-item">
+                                @Html.LabelFor(x => x.Name)
+                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(m => m.Name)
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-item">
+                                @Html.LabelFor(x => x.GatewayTypeId)
+                                @Html.TextBoxFor(m => m.GatewayTypeName, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.TextBoxFor(m => m.GatewayTypeId, new { @class = "hidden", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(m => m.GatewayTypeId)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-item">
+                                @Html.LabelFor(x => x.VatPerc)
+                                @Html.TextBoxFor(m => m.VatPerc, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(m => m.VatPerc)
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-item">
+                                @Html.LabelFor(x => x.PriceNoVat)
+                                @Html.TextBoxFor(m => m.PriceNoVat, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(m => m.PriceNoVat)
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-item">
+                                @Html.LabelFor(x => x.PriceWithVat)
+                                @Html.TextBoxFor(m => m.PriceWithVat, new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(m => m.PriceWithVat)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row new-section">
+                <div class="col-md-12">
+                    <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Odstrániť</a>
+                    <a href="@Url.Content("~/moj-ucet/sposoby-dopravy")" class="btn btn-default btn-lg">Späť</a>
+                    <input type="submit" id="submitButton" class="hidden" />
+                </div>
+            </div>
+        </div>
+    }
+}

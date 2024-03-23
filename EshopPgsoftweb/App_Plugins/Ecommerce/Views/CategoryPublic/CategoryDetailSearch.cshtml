@@ -1,0 +1,15 @@
+﻿@model CategoryPublicModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+
+<div class="product-search">
+    <div class="search-request">
+        <input type="text" placeholder="vyhľadať produkt" />
+        <a href="#" onclick="ecProductSearch(); return false;"><i class="fa fa-search"></i></a>
+    </div>
+    <div class="search-result">
+    </div>
+    <div class="search-pending hidden">
+        <i class="fa fa-spinner fa-spin"></i>
+        <span>PREBIEHA VYHĽADÁVANIE, MOMENT PROSÍM ...</span>
+    </div>
+</div>

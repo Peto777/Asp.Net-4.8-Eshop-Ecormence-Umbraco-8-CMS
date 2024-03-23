@@ -1,0 +1,164 @@
+﻿@model CategoryPublicModel
+@using eshoppgsoftweb.lib.Models.Ecommerce
+@using eshoppgsoftweb.lib.Util
+
+@{ 
+    CategoryModel parent = Model.EshopData.CategoryTreeData.GetCategoryNode(Model.CategoryData.pk);
+    if (parent.Parent != null && parent.Parent.pk != Model.EshopData.CategoryTreeData.Root.pk)
+    {
+        parent = parent.Parent;
+    }
+    bool isRoot = parent.pk == Model.EshopData.CategoryTreeData.Root.pk;
+    bool isAltRow = false;
+}
+
+<div class="category-detail-menubar">
+    <div id="navbar-category" class="collapse navbar-collapse">
+        @if (!isRoot)
+        {
+            <div class="category-menu-main">
+                <a href="#category-menu-main" data-toggle="collapse" class="btn-toggle">HLAVNÉ KATEGÓRIE <i class="fa fa-caret-down"></i></a>
+                <ul id="category-menu-main" class="collapse">
+                    <li>
+                        <a href="@ConfigurationUtil.EshopRootUrl">
+                            
+                            Všetky produkty
+                        </a>
+                    </li>
+                    @foreach (CategoryModel category in Model.EshopData.CategoryTreeData.Root.Children)
+                    {
+                        if (category.CategoryIsVisible)
+                        {
+                            isAltRow = !isAltRow;
+                            <li>
+                                <a href="@category.Url" class="@(isAltRow ? "alt-row" : null)">
+                                    @if (!string.IsNullOrEmpty(category.CategoryImg))
+                                    {
+                                        <img src="@category.CategoryImg" alt="@category.CategoryName" />
+                                    }
+                                    @category.CategoryName
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+        <div class="category-menu-children @(parent.pk == Model.EshopData.CategoryTreeData.Root.pk ? "root" : null)">
+            <ul>
+                @if (isRoot)
+                {
+                    <li class="parentcategory"><a href="@ConfigurationUtil.EshopRootUrl" class="@(parent.pk == Model.CategoryData.pk ? "active" : "")"><img src="@Url.Content("~/Styles/images/pgsoftweb-logo-footer.png")" alt="Všetky produkty" />VŠETKY PRODUKTY</a></li>
+                }
+                else
+                {
+                    <li class="parentcategory">
+                        <a href="@parent.Url" class="@(parent.pk == Model.CategoryData.pk ? "active" : "")">
+                            @if (!string.IsNullOrEmpty(parent.CategoryImg))
+                            {
+                                <img src="@parent.CategoryImg" alt="@parent.CategoryName" />
+                            }
+                            @parent.CategoryName
+                        </a>
+                    </li>
+                }
+                <li class="toolbar">
+                    <a href="#" onclick="ecCategoryPublicFilterModel_ProductViewType('@Model.SessionId', '@CategoryPublicFilterModel_ProductView.ProductView_Image');return false;" class="@string.Format("{0}", Model.Filter.ProductViewFilter.ProductViewType == CategoryPublicFilterModel_ProductView.ProductView_Image ? "active" : "")" title="Tabuľkové zobrazenie"><i class="fa fa-table fa-fw"></i></a>
+                    <a href="#" onclick="ecCategoryPublicFilterModel_ProductViewType('@Model.SessionId', '@CategoryPublicFilterModel_ProductView.ProductView_List');return false;" class="@string.Format("{0}", Model.Filter.ProductViewFilter.ProductViewType == CategoryPublicFilterModel_ProductView.ProductView_List ? "active" : "")" title="Riadkové zobrazenie"><i class="fa fa-list fa-fw"></i></a>
+                    <a href="#" onclick="ecCategoryPublicFilterModel_PageSize('@Model.SessionId', '@CategoryPublicFilterModel_PageSize.PageSize_Size_1');return false;" class="@string.Format("{0}", Model.Filter.PageSizeFilter.PageSize == CategoryPublicFilterModel_PageSize.PageSize_Size_1 ? "active" : "")" title="20 produktov na stránke">20</a>
+                    <a href="#" onclick="ecCategoryPublicFilterModel_PageSize('@Model.SessionId', '@CategoryPublicFilterModel_PageSize.PageSize_Size_2');return false;" class="@string.Format("{0}", Model.Filter.PageSizeFilter.PageSize == CategoryPublicFilterModel_PageSize.PageSize_Size_2 ? "active" : "")" title="40 produktov na stránke">40</a>
+                    <a href="#" onclick="ecCategoryPublicFilterModel_PageSize('@Model.SessionId', '@CategoryPublicFilterModel_PageSize.PageSize_Size_All');return false;" class="@string.Format("{0}", Model.Filter.PageSizeFilter.PageSize == CategoryPublicFilterModel_PageSize.PageSize_Size_All ? "active" : "")" title="Všetky produkty"><i class="fas fa-infinity"></i></a>
+                </li>
+                @foreach (CategoryModel child in parent.Children)
+                {
+                    if (child.CategoryIsVisible)
+                    {
+                        <li class="subcategory">
+                            <a href="@child.Url" class="@(child.pk == Model.CategoryData.pk ? "active" : "")">
+                                @if (isRoot)
+                                {
+                                    if (!string.IsNullOrEmpty(child.CategoryImg))
+                                    {
+                                        <img src="@child.CategoryImg" alt="@child.CategoryName" />
+                                    }
+                                }
+                                @child.CategoryName
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <div class="category-menu">
+            <div class="menu-section">
+                <div class="title">VÝROBCA</div>
+                <div class="section-cb">
+                    @foreach (CategoryPublicFilterModel_ProducerItem producerItem in Model.Filter.ProducersFilter.Producers)
+                    {
+                        string producerKey = producerItem.ProducerData.pk.ToString();
+                        if (!Model.Filter.ProducersFilter.IsProducerEnabled(producerKey))
+                        {
+                            // do not display this producer
+                            continue;
+                        }
+                        string id = string.Format("pcb-{0}", producerKey);
+                        <div class="cb-item">
+                            @if (producerItem.IsChecked)
+                            {
+                                <input type="checkbox" id="@id" name="@id" class="styled eccd-prodsel" checked="checked" data-sessionid="@Model.SessionId" data-producer="@producerKey" />
+                            }
+                            else
+                            {
+                                <input type="checkbox" id="@id" name="@id" class="styled eccd-prodsel" data-sessionid="@Model.SessionId" data-producer="@producerKey" />
+                            }
+                            <label for="@id">@producerItem.ProducerData.ProducerName</label>
+                        </div>
+                    }
+                    <div class="actions">
+                        <a href="#" onclick="ecCategoryPublicFilterModel_AllProducers('@Model.SessionId', true); return false" class="btn-select">Všetko</a>
+                        <a href="#" onclick="ecCategoryPublicFilterModel_AllProducers('@Model.SessionId', false); return false" class="btn-select">Zrušiť</a>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-section hidden">
+                <div class="title">CHARAKTERISTIKA</div>
+                <div class="section-cb">
+                    <div class="row">
+                        @foreach (CategoryPublicFilterModel_ProductAttributeItem attributeItem in Model.Filter.ProductAttributesFilter.ProductAttributes)
+                        {
+                            string attributeKey = attributeItem.ProductAttributeData.pk.ToString();
+                            string id = string.Format("acb-{0}", attributeKey);
+                            <div class="col-sm-12">
+                                <div class="cb-item">
+                                    @if (attributeItem.IsChecked)
+                                    {
+                                        <input type="checkbox" id="@id" name="@id" class="styled eccd-attrsel" checked="checked" data-sessionid="@Model.SessionId" data-attribute="@attributeKey" />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" id="@id" name="@id" class="styled eccd-attrsel" data-sessionid="@Model.SessionId" data-attribute="@attributeKey" />
+                                    }
+                                    <label for="@id">@attributeItem.ProductAttributeData.ProductAttributeName</label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="actions">
+                        <a href="#" onclick="ecCategoryPublicFilterModel_AllProdAttrs('@Model.SessionId', true); return false" class="btn-select">Všetko</a>
+                        <a href="#" onclick="ecCategoryPublicFilterModel_AllProdAttrs('@Model.SessionId', false); return false" class="btn-select">Zrušiť</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <div class="title">TRIEDIŤ PODĽA</div>
+                <div class="section-dd">
+                    @Html.DropDownListFor(m => m.Filter.ProductSortFilter.ProductSortType, new SelectList(CategoryPublicFilterModel_ProductSortDropDown.CreateFromRepository(), "DataKey", "Name"), new { @class = "form-control chosen-select eccd-pst", @data_sessionid = Model.SessionId })
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

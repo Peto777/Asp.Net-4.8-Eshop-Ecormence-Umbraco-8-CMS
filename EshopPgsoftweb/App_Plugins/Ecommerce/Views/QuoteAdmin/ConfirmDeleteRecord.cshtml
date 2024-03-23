@@ -1,0 +1,129 @@
+﻿@model eshoppgsoftweb.lib.Models.Ecommerce.QuoteModel
+
+@{
+    using (Html.BeginUmbracoForm<eshoppgsoftweb.lib.Controllers.Ecommerce.QuoteAdminController>("DeleteRecord", null, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="naplnspajzu-form">
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Partial("Ecommerce/_ModelError", Model.ModelErrors)
+                    @Html.AntiForgeryToken()
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="big">Prajete si skutočne odstrániť vybranú objednávku?</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-item-hidden">
+                        @Html.TextBoxFor(m => m.pk, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.SessionId, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.DateCreateView, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.QuoteYear, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.QuoteNumber, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.QuotePriceNoVat, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.QuotePriceWithVat, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <fieldset>
+                        <legend>Objednávka</legend>
+                        <div class="row inner-row">
+                            <div class="col-md-6">
+                                <div class="form-item">
+                                    @Html.LabelFor(x => x.QuoteId)
+                                    @Html.TextBoxFor(m => m.QuoteId, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.QuoteId)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-item">
+                                    @Html.LabelFor(x => x.DateFinishedView)
+                                    @Html.TextBoxFor(m => m.DateFinishedView, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.DateFinishedView)
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-item">
+                                    @Html.LabelFor(x => x.QuoteState)
+                                    @Html.TextBoxFor(m => m.QuoteState, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.QuoteState)
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-item">
+                                    @Html.LabelFor(x => x.QuotePriceState)
+                                    @Html.TextBoxFor(m => m.QuotePriceState, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.QuotePriceState)
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-item">
+                                    @Html.LabelFor(x => x.Note)
+                                    @Html.TextAreaFor(m => m.Note, new { @class = "form-control", @readonly = "readonly", style = "height:150px" })
+                                    @Html.ValidationMessageFor(m => m.Note)
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-md-7">
+                    <div class="hidden">
+                        @Html.TextBoxFor(m => m.User.InvStreet, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.User.InvCity, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.User.InvZip, new { @class = "form-control", @readonly = "readonly" })
+                        @Html.TextBoxFor(m => m.User.InvCountryCollectionKey, new { @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <fieldset>
+                        <legend>Kontakt</legend>
+                        <div class="row inner-row">
+                            <div class="col-md-12">
+                                <div class="form-item">
+                                    @Html.LabelFor(x => x.User.InvName)
+                                    @Html.TextBoxFor(m => m.User.InvName, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.User.InvName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row inner-row">
+                            <div class="col-md-6">
+                                <div class="form-item">
+                                    @Html.LabelFor(x => x.User.QuoteEmail)
+                                    @Html.TextBoxFor(m => m.User.QuoteEmail, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.User.QuoteEmail)
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-item">
+                                    @Html.LabelFor(x => x.User.QuotePhone)
+                                    @Html.TextBoxFor(m => m.User.QuotePhone, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.User.QuotePhone)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row inner-row">
+                            <div class="col-md-12">
+                                <div class="form-item">
+                                    @Html.LabelFor(x => x.User.Note)
+                                    @Html.TextAreaFor(m => m.User.Note, new { @class = "form-control", @readonly = "readonly", style = "height:100px" })
+                                    @Html.ValidationMessageFor(m => m.User.Note)
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row new-section">
+                <div class="col-md-12">
+                    <a href="#" onclick="document.getElementById('submitButton').click(); return false;" class="btn btn-default btn-lg">Odstrániť</a>
+                    <a href="@Url.Content("~/moj-ucet/objednavky")" class="btn btn-default btn-lg">Späť</a>
+                    <input type="submit" id="submitButton" class="hidden" />
+                </div>
+            </div>
+        </div>
+    }
+}
